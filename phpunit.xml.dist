@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<phpunit
+	bootstrap="tests/php/bootstrap.php"
+	backupGlobals="false"
+	colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	beStrictAboutOutputDuringTests="true"
+	reverseDefectList="true"
+>
+
+	<testsuites>
+		<testsuite name="enhanced-dependencies">
+			<directory prefix="test-" suffix=".php">./tests/php/</directory>
+		</testsuite>
+	</testsuites>
+
+	<filter>
+		<whitelist processUncoveredFilesFromWhitelist="true">
+			<file>dist/functions.php</file>
+		</whitelist>
+	</filter>
+
+	<logging>
+		<log type="coverage-html" target="tests/reports/php" />
+	</logging>
+
+</phpunit>
