@@ -2,7 +2,7 @@
 /**
  * Plugin name: Enhanced Dependencies
  * Plugin URI: https://github.com/crstauf/enhanced-dependencies
- * Description: Collection of enhancements for WordPress dependencies.
+ * Description: Enhancements for WordPress dependencies (ex: server push, inlining, async).
  * Author: Caleb Stauffer
  * Author URI: https://develop.calebstauffer.com
  * Version: 1.0

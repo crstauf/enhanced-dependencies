@@ -11,7 +11,7 @@ class Plugin_Data extends \WP_UnitTestCase {
 			'Name' => 'Enhanced Dependencies',
 			'PluginURI' => 'https://github.com/crstauf/enhanced-dependencies',
 			'Version' => '1.0',
-			'Description' => 'Collection of enhancements for WordPress dependencies.',
+			'Description' => 'Enhancements for WordPress dependencies (ex: server push, inlining, async).',
 			'Author' => 'Caleb Stauffer',
 			'AuthorURI' => 'https://develop.calebstauffer.com',
 			'TextDomain' => '',
