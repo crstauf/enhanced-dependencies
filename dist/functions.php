@@ -16,6 +16,8 @@ if ( !function_exists( 'wp_enhance_script' ) ) {
 	 * @return void
 	 */
 	function wp_enhance_script( string $handle, string $enhancement_key, array $options = array() ) : void {
+		Enhanced_Dependencies\Dependency::get( $handle, true )
+			->add( $enhancement_key, $options );
 	}
 
 }
@@ -32,6 +34,8 @@ if ( !function_exists( 'wp_enhance_style' ) ) {
 	 * @return void
 	 */
 	function wp_enhance_style( string $handle, string $enhancement_key, array $options = array() ) : void {
+		Enhanced_Dependencies\Dependency::get( $handle, false )
+			->add( $enhancement_key, $options );
 	}
 
 }
@@ -46,6 +50,8 @@ if ( !function_exists( 'wp_dehance_scripts' ) ) {
 	 * @return void
 	 */
 	function wp_dehance_script( string $handle, string $enhancement_key = null ) : void {
+		Enhanced_Dependencies\Dependency::get( $handle, true )
+			->remove( $enhancement_key );
 	}
 
 }
@@ -60,6 +66,8 @@ if ( !function_exists( 'wp_dehance_style' ) ) {
 	 * @return void
 	 */
 	function wp_dehance_style( string $handle, string $enhancement_key = null ) : void {
+		Enhanced_Dependencies\Dependency::get( $handle, false )
+			->remove( $enhancement_key );
 	}
 
 }

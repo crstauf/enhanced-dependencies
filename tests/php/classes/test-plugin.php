@@ -17,6 +17,7 @@ class Test_Plugin extends \WP_UnitTestCase {
 
 		foreach ( array(
 			'functions.php',
+			'classes/dependency.php',
 		) as $file )
 			$this->assertContains( Plugin::directory() . $file, $included_files );
 	}

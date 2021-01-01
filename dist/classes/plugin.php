@@ -77,9 +77,12 @@ class Plugin {
 	 *
 	 * @uses static::directory()
 	 * @return void
+	 *
+	 * @codeCoverageIgnore
 	 */
 	protected function includes() : void {
 		require_once static::directory() . 'functions.php';
+		require_once static::directory() . 'classes/dependency.php';
 	}
 
 }
