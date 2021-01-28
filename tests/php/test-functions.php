@@ -16,7 +16,7 @@ class Test_Functions extends \WP_UnitTestCase {
 	}
 
 	function test_wp_enhance_script() : void {
-		$test_handle = 'test-enhancement-script';
+		$test_handle = uniqid( 'test-enhancement-script' );
 		$builtin = wp_scripts()->registered['jquery-core'];
 
 		wp_register_script( $test_handle, $builtin->src, $builtin->deps, $builtin->ver );
@@ -31,7 +31,7 @@ class Test_Functions extends \WP_UnitTestCase {
 	}
 
 	function test_wp_enhance_style() : void {
-		$test_handle = 'test-enhancement-style';
+		$test_handle = uniqid( 'test-enhancement-style' );
 		$builtin = wp_styles()->registered['admin-bar'];
 
 		wp_register_style( $test_handle, $builtin->src, $builtin->deps, $builtin->ver );
@@ -46,7 +46,7 @@ class Test_Functions extends \WP_UnitTestCase {
 	}
 
 	function test_wp_dehance_script() : void {
-		$test_handle = 'test-dehancement-script';
+		$test_handle = uniqid( 'test-dehancement-script' );
 		$test_enhancement_key = 'test-script-enhancement';
 		$options = array( 'test-opt' => rand() );
 		$builtin = wp_scripts()->registered['jquery-core'];
@@ -61,7 +61,7 @@ class Test_Functions extends \WP_UnitTestCase {
 	}
 
 	function test_wp_dehance_style() : void {
-		$test_handle = 'test-dehancement-style';
+		$test_handle = uniqid( 'test-dehancement-style' );
 		$test_enhancement_key = 'test-style-enhancement';
 		$options = array( 'test-opt' => rand() );
 		$builtin = wp_styles()->registered['admin-bar'];

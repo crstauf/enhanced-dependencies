@@ -17,7 +17,7 @@ if ( !function_exists( 'wp_enhance_script' ) ) {
 	 */
 	function wp_enhance_script( string $handle, string $enhancement_key, array $options = array() ) : void {
 		Enhanced_Dependencies\Dependency::get( $handle, true )
-			->add( $enhancement_key, $options );
+			->set( $enhancement_key, $options );
 	}
 
 }
@@ -35,7 +35,7 @@ if ( !function_exists( 'wp_enhance_style' ) ) {
 	 */
 	function wp_enhance_style( string $handle, string $enhancement_key, array $options = array() ) : void {
 		Enhanced_Dependencies\Dependency::get( $handle, false )
-			->add( $enhancement_key, $options );
+			->set( $enhancement_key, $options );
 	}
 
 }
