@@ -84,6 +84,12 @@ class Plugin {
 	protected function includes() : void {
 		require_once static::directory() . 'functions.php';
 		require_once static::directory() . 'classes/dependency.php';
+		require_once static::directory() . 'classes/enhancements-manager.php';
+		require_once static::directory() . 'classes/enhancement.php';
+
+		require_once static::directory() . '/classes/enhancements/async.php';
+
+		do_action( 'include_dependency_enhancements' );
 	}
 
 	/**
@@ -139,32 +145,32 @@ class Plugin {
 	/**
 	 * Maybe enhance dependency tag.
 	 *
-	 * @param string $html
+	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
 	 * @uses Dependency::get()
-	 * @uses Enhancements::get()
+	 * @uses Enhancements_Manager::get()
 	 * @uses Enhancement::apply()
 	 * @return string
 	 *
 	 * @codeCoverageIgnore
 	 */
-	protected function maybe_enhance_tag( string $html, string $handle, bool $is_script ) : string {
+	protected function maybe_enhance_tag( string $tag, string $handle, bool $is_script ) : string {
 		$dependency = Dependency::get( $handle, $is_script );
 
 		if ( !$dependency->has() )
-			return $html;
+			return $tag;
 
 		foreach ( $dependency->enhancements as $key => $options ) {
-			$enhancement = Enhancements::get( $key );
+			$enhancement = Enhancements_Manager::get( $key );
 
 			if ( empty( $enhancement ) )
 				continue;
 
-			$html = call_user_func_array( array( $enhancement, 'apply' ), array( $handle, $is_script, $options ) );
+			$tag = call_user_func_array( array( $enhancement, 'apply' ), array( $tag, $handle, $is_script, $options ) );
 		}
 
-		return $html;
+		return $tag;
 	}
 
 }

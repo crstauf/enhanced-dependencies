@@ -20,9 +20,10 @@
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
 			<file>dist/functions.php</file>
-			<file>dist/classes/dependency.php</file>
-			<file>dist/classes/enhancements.php</file>
 			<file>dist/classes/plugin.php</file>
+			<file>dist/classes/dependency.php</file>
+			<file>dist/classes/enhancements-manager.php</file>
+			<file>dist/classes/enhancements/async.php</file>
 		</whitelist>
 	</filter>
 

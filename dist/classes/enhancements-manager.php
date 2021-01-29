@@ -5,9 +5,9 @@ namespace Enhanced_Dependencies;
 defined( 'WPINC' ) || die(); // @codeCoverageIgnore
 
 /**
- * Class: Enhanced_Dependencies\Enhancements
+ * Class: Enhanced_Dependencies\Enhancements_Manager
  */
-class Enhancements {
+class Enhancements_Manager {
 
 	/**
 	* @var array key => class name
