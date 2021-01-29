@@ -2,7 +2,7 @@
 
 namespace Enhanced_Dependencies;
 
-defined( 'WPINC' ) || die();
+defined( 'WPINC' ) || die(); // @codeCoverageIgnore
 
 /**
  * Class: Enhanced_Dependencies\Plugin
@@ -70,6 +70,7 @@ class Plugin {
 	 */
 	protected function __construct() {
 		$this->includes();
+		$this->hooks();
 	}
 
 	/**
@@ -83,6 +84,87 @@ class Plugin {
 	protected function includes() : void {
 		require_once static::directory() . 'functions.php';
 		require_once static::directory() . 'classes/dependency.php';
+	}
+
+	/**
+	 * Register hooks.
+	 *
+	 * @return void
+	 *
+	 * @codeCoverageIgnore
+	 */
+	protected function hooks() : void {
+		add_filter( 'script_loader_tag', array( $this, 'filter__script_loader_tag' ), 10, 2 );
+		add_filter(  'style_loader_tag', array( $this,  'filter__style_loader_tag' ), 10, 2 );
+	}
+
+	/**
+	 * Filter: script_loader_tag
+	 *
+	 * Maybe enhance script tags.
+	 *
+	 * @param string $html
+	 * @param string $handle
+	 * @uses static::maybe_enhance_tag()
+	 * @return string
+	 *
+	 * @codeCoverageIgnore
+	 */
+	function filter__script_loader_tag( string $html, string $handle ) : string {
+		if ( !doing_filter( 'script_loader_tag' ) )
+			return $html;
+
+		return $this->maybe_enhance_tag( $html, $handle, true );
+	}
+
+	/**
+	 * Filter: style_loader_tag
+	 *
+	 * Maybe enhance stylesheet tags.
+	 *
+	 * @param string $html
+	 * @param string $handle
+	 * @uses static::maybe_enhance_tag()
+	 * @return string
+	 *
+	 * @codeCoverageIgnore
+	 */
+	function filter__style_loader_tag( string $html, string $handle ) : string {
+		if ( !doing_filter( 'style_loader_tag' ) )
+			return $html;
+
+		return $this->maybe_enhance_tag( $html, $handle, false );
+	}
+
+	/**
+	 * Maybe enhance dependency tag.
+	 *
+	 * @param string $html
+	 * @param string $handle
+	 * @param bool $is_script
+	 * @uses Dependency::get()
+	 * @uses Enhancements::get()
+	 * @uses Enhancement::apply()
+	 * @return string
+	 *
+	 * @codeCoverageIgnore
+	 */
+	protected function maybe_enhance_tag( string $html, string $handle, bool $is_script ) : string {
+		$dependency = Dependency::get( $handle, $is_script );
+
+		if ( !$dependency->has() )
+			return $html;
+
+		foreach ( $dependency->enhancements as $key => $options ) {
+			$enhancement = Enhancements::get( $key );
+
+			if ( empty( $enhancement ) )
+				continue;
+
+			$html = call_user_func_array( array( $enhancement, 'apply' ), array( $handle, $is_script, $options ) );
+		}
+
+		return $html;
 	}
 
 }

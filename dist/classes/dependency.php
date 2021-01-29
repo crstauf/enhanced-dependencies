@@ -5,7 +5,7 @@
 
 namespace Enhanced_Dependencies;
 
-defined( 'WPINC' ) || die();
+defined( 'WPINC' ) || die(); // @codeCoverageIgnore
 
 /**
  * Class: Enhanced_Dependencies\Dependency
@@ -139,6 +139,19 @@ class Dependency {
 		$this->save();
 
 		return $this;
+	}
+
+	/**
+	 * Check dependency has enhancement(s).
+	 *
+	 * @param null|string $enhancement_key
+	 * @return bool
+	 */
+	function has( string $enhancement_key = null ) : bool {
+		if ( is_null( $enhancement_key ) )
+			return !empty( $this->enhancements );
+
+		return array_key_exists( $enhancement_key, $this->enhancements );
 	}
 
 }

@@ -67,6 +67,18 @@ class Test_Dependency extends \WP_UnitTestCase {
 		$this->assertArrayNotHasKey( $test_enhancement_key, $dependency->enhancements );
 	}
 
+	function test_has() : void {
+		$dependency = new Dependency( uniqid( 'test-enhancement-dependency' ) );
+		$this->assertFalse( $dependency->has() );
+		$this->assertFalse( $dependency->has( 'test-enhancement-key' ) );
+		$this->assertFalse( $dependency->has( 'test-enhancement-key-notexist' ) );
+
+		$dependency->set( 'test-enhancement-key' );
+		$this->assertTrue( $dependency->has() );
+		$this->assertTrue( $dependency->has( 'test-enhancement-key' ) );
+		$this->assertFalse( $dependency->has( 'test-enhancement-key-notexist' ) );
+	}
+
 }
 
 ?>
