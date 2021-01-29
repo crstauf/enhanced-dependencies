@@ -76,3 +76,5 @@ class Test_Functions extends \WP_UnitTestCase {
 	}
 
 }
+
+?>

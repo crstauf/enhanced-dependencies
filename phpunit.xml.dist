@@ -24,6 +24,7 @@
 			<file>dist/classes/dependency.php</file>
 			<file>dist/classes/enhancements-manager.php</file>
 			<file>dist/classes/enhancements/async.php</file>
+			<file>dist/classes/enhancements/defer.php</file>
 		</whitelist>
 	</filter>
 

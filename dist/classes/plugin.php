@@ -88,6 +88,7 @@ class Plugin {
 		require_once static::directory() . 'classes/enhancement.php';
 
 		require_once static::directory() . '/classes/enhancements/async.php';
+		require_once static::directory() . '/classes/enhancements/defer.php';
 
 		do_action( 'include_dependency_enhancements' );
 	}
@@ -174,3 +175,5 @@ class Plugin {
 	}
 
 }
+
+?>

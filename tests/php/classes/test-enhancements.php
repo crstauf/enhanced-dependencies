@@ -41,3 +41,5 @@ class Test_Enhancements extends \WP_UnitTestCase {
 	}
 
 }
+
+?>

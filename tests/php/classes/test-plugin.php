@@ -23,3 +23,5 @@ class Test_Plugin extends \WP_UnitTestCase {
 	}
 
 }
+
+?>

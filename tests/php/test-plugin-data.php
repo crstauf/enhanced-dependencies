@@ -28,3 +28,5 @@ class Plugin_Data extends \WP_UnitTestCase {
 	}
 
 }
+
+?>
