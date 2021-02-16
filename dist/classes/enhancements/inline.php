@@ -29,10 +29,13 @@ class Inline extends Enhancement {
 
 		$content = file_get_contents( $path );
 
-		if ( empty( $content ) ) {
-			trigger_error( sprintf( 'Unable to get contents of <code>%s</code> at <code>%s</code>.', $handle, $path ) );
-			return $tag;
+		if ( false === $content ) {
+			trigger_error( sprintf( 'Unable to get contents of <code>%s</code> at <code>%s</code>.', $handle, $path ) ); // @codeCoverageIgnore
+			return $tag; // @codeCoverageIgnore
 		}
+
+		if ( empty( $content ) )
+			$content = '/* empty */';
 
 		if ( $is_script )
 			return '<script id="' . esc_attr( $handle ) . '-inline-js">' . $content . '</script>';
