@@ -8,7 +8,7 @@ defined( 'WPINC' ) || die();
 class Test_Plugin extends \WP_UnitTestCase {
 
 	function test_paths() : void {
-		$this->assertIsString( Plugin::directory() );
+		$this->assertIsString( Plugin::directory_path() );
 		$this->assertIsString( Plugin::file() );
 	}
 
@@ -19,7 +19,7 @@ class Test_Plugin extends \WP_UnitTestCase {
 			'functions.php',
 			'classes/dependency.php',
 		) as $file )
-			$this->assertContains( Plugin::directory() . $file, $included_files );
+			$this->assertContains( Plugin::directory_path() . $file, $included_files );
 	}
 
 }

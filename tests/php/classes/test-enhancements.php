@@ -3,6 +3,9 @@
 namespace Enhanced_Dependencies\Tests;
 use Enhanced_Dependencies\Enhancements_Manager;
 
+/**
+ * @todo test built-in enhancements are registered
+ */
 class Test_Enhancements extends \WP_UnitTestCase {
 
 	/**
@@ -31,6 +34,9 @@ class Test_Enhancements extends \WP_UnitTestCase {
 		$this->assertEquals( $test_enhancement_class_name, Enhancements_Manager::get( $test_enhancement_key ) );
 	}
 
+	/**
+	 * @covers \Enhanced_Dependencies\Enhancements_Manager::register()
+	 */
 	function test_register__exists() : void {
 		$test_enhancement_key = uniqid( 'test-enhancement-key' );
 		$test_enhancement_class_name = uniqid( 'test_enhancement_class_name' );

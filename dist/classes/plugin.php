@@ -26,6 +26,7 @@ class Plugin {
 			return;
 
 		static::$file = $file;
+
 		$instance = static::instance();
 	}
 
@@ -46,7 +47,7 @@ class Plugin {
 	}
 
 	/**
-	 * Get plugin file path.
+	 * Get plugin file.
 	 *
 	 * @return string
 	 */
@@ -59,8 +60,8 @@ class Plugin {
 	 *
 	 * @return string
 	 */
-	static function directory() : string {
-		return plugin_dir_path( static::$file );
+	static function directory_path() : string {
+		return trailingslashit( plugin_dir_path( static::$file ) );
 	}
 
 	/**
@@ -82,13 +83,14 @@ class Plugin {
 	 * @codeCoverageIgnore
 	 */
 	protected function includes() : void {
-		require_once static::directory() . 'functions.php';
-		require_once static::directory() . 'classes/dependency.php';
-		require_once static::directory() . 'classes/enhancements-manager.php';
-		require_once static::directory() . 'classes/enhancement.php';
+		require_once static::directory_path() . 'functions.php';
+		require_once static::directory_path() . 'classes/dependency.php';
+		require_once static::directory_path() . 'classes/enhancements-manager.php';
+		require_once static::directory_path() . 'classes/enhancement.php';
 
-		require_once static::directory() . '/classes/enhancements/async.php';
-		require_once static::directory() . '/classes/enhancements/defer.php';
+		require_once static::directory_path() . '/classes/enhancements/async.php';
+		require_once static::directory_path() . '/classes/enhancements/defer.php';
+		require_once static::directory_path() . '/classes/enhancements/inline.php';
 
 		do_action( 'include_dependency_enhancements' );
 	}

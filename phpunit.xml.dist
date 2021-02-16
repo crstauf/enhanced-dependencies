@@ -25,6 +25,7 @@
 			<file>dist/classes/enhancements-manager.php</file>
 			<file>dist/classes/enhancements/async.php</file>
 			<file>dist/classes/enhancements/defer.php</file>
+			<file>dist/classes/enhancements/inline.php</file>
 		</whitelist>
 	</filter>
 
