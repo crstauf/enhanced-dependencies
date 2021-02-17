@@ -42,6 +42,8 @@ class Test_Dependency extends \WP_UnitTestCase {
 		$dependency = new Dependency( $test_enhancement_handle );
 		$this->assertInstanceOf( Dependency::class, $dependency->set( $test_enhancement_key, range( 1, 5 ) ) );
 		$this->assertEquals( range( 1, 5 ), $dependency->enhancements[ $test_enhancement_key ] );
+
+		$this->assertTrue( !!did_action( 'set_dependency_enhancement' ) );
 	}
 
 	function test_remove__empty() : void {
