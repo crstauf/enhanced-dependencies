@@ -179,6 +179,21 @@ class Dependency {
 		return $this->helper()->registered[ $this->handle ];
 	}
 
+	/**
+	 * Check if dependency is registered, enqueued, etc.
+	 *
+	 * @param string $action
+	 * @uses wp_script_is()
+	 * @uses wp_style_is()
+	 * @return bool
+	 */
+	function is( string $action ) : bool {
+		if ( $this->is_script )
+			return wp_script_is( $this->handle, $action );
+
+		return wp_style_is( $this->handle, $action );
+	}
+
 }
 
 ?>

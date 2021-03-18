@@ -94,6 +94,27 @@ class Test_Dependency extends \WP_UnitTestCase {
 		$this->assertEquals( $wp_dep, $dependency->wp_dep() );
 	}
 
+	function test_is() : void {
+		$dependency = new Dependency( uniqid( 'test-enhancement-dependency' ), true );
+		$this->assertFalse( $dependency->is( 'registered' ) );
+		$this->assertFalse( $dependency->is( 'enqueued' ) );
+
+		$dependency = new Dependency( uniqid( 'test-enhancement-dependency' ), false );
+		$this->assertFalse( $dependency->is( 'registered' ) );
+		$this->assertFalse( $dependency->is( 'enqueued' ) );
+
+		$dependency = new Dependency( 'jquery-core', true );
+		$this->assertTrue(  $dependency->is( 'registered' ) );
+		$this->assertFalse( $dependency->is( 'enqueued'   ) );
+
+		$dependency = new Dependency( 'admin-bar', false );
+		$this->assertTrue(  $dependency->is( 'registered' ) );
+		$this->assertFalse( $dependency->is( 'enqueued'   ) );
+
+		wp_enqueue_style( 'admin-bar' );
+		$this->assertTrue( $dependency->is( 'enqueued' ) );
+	}
+
 }
 
 ?>
