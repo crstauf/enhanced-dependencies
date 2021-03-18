@@ -81,6 +81,19 @@ class Test_Dependency extends \WP_UnitTestCase {
 		$this->assertFalse( $dependency->has( 'test-enhancement-key-notexist' ) );
 	}
 
+	function test_wp_dep() : void {
+		$dependency = new Dependency( uniqid( 'test-enhancement-script-notexist' ), true );
+		$this->assertEquals( false, $dependency->wp_dep() );
+
+		$dependency = new Dependency( 'jquery-core', true );
+		$wp_dep = wp_scripts()->registered['jquery-core'];
+		$this->assertEquals( $wp_dep, $dependency->wp_dep() );
+
+		$dependency = new Dependency( 'admin-bar', false );
+		$wp_dep = wp_styles()->registered['admin-bar'];
+		$this->assertEquals( $wp_dep, $dependency->wp_dep() );
+	}
+
 }
 
 ?>

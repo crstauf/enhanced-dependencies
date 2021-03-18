@@ -158,6 +158,27 @@ class Dependency {
 		return array_key_exists( $enhancement_key, $this->enhancements );
 	}
 
+	/**
+	 * Get WordPress dependency object.
+	 *
+	 * @return bool|_WP_Dependency
+	 */
+	function wp_dep() {
+		if (
+			$this->is_script
+			&& !wp_script_is( $this->handle, 'registered' )
+		)
+			return false;
+
+		if (
+			!$this->is_script
+			&& !wp_style_is( $this->handle, 'registered' )
+		)
+			return false;
+
+		return $this->helper()->registered[ $this->handle ];
+	}
+
 }
 
 ?>
