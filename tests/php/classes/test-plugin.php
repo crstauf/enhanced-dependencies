@@ -16,10 +16,21 @@ class Test_Plugin extends \WP_UnitTestCase {
 		$included_files = get_included_files();
 
 		foreach ( array(
-			'functions.php',
 			'classes/dependency.php',
+			'classes/enhancement.php',
+			'classes/enhancements-manager.php',
+			'classes/enhancements/async.php',
+			'classes/enhancements/defer.php',
+			'classes/enhancements/inline.php',
+			'classes/enhancements/preconnect.php',
+			'classes/plugin.php',
+			'enhanced-dependencies.php',
+			'functions.php',
 		) as $file )
 			$this->assertContains( Plugin::directory_path() . $file, $included_files );
+
+		# Enhancement dns-prefetch is handled by WordPress.
+		$this->assertNotContains( Plugin::directory_path() . 'classes/enhancements/dns-prefetch.php', $included_files );
 	}
 
 }
