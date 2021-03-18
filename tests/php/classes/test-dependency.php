@@ -83,7 +83,10 @@ class Test_Dependency extends \WP_UnitTestCase {
 
 	function test_wp_dep() : void {
 		$dependency = new Dependency( uniqid( 'test-enhancement-script-notexist' ), true );
-		$this->assertEquals( false, $dependency->wp_dep() );
+		$this->assertFalse( $dependency->wp_dep() );
+
+		$dependency = new Dependency( uniqid( 'test-enhancement-style-notexist' ), false );
+		$this->assertFalse( $dependency->wp_dep() );
 
 		$dependency = new Dependency( 'jquery-core', true );
 		$wp_dep = wp_scripts()->registered['jquery-core'];
