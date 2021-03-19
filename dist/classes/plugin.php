@@ -93,6 +93,7 @@ class Plugin {
 		require_once static::directory_path() . '/classes/enhancements/inline.php';
 		require_once static::directory_path() . '/classes/enhancements/preconnect.php';
 		require_once static::directory_path() . '/classes/enhancements/prefetch.php';
+		require_once static::directory_path() . '/classes/enhancements/preload.php';
 
 		do_action( 'include_dependency_enhancements' );
 	}

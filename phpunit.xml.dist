@@ -28,6 +28,7 @@
 			<file>dist/classes/enhancements/inline.php</file>
 			<file>dist/classes/enhancements/preconnect.php</file>
 			<file>dist/classes/enhancements/prefetch.php</file>
+			<file>dist/classes/enhancements/preload.php</file>
 		</whitelist>
 	</filter>
 
