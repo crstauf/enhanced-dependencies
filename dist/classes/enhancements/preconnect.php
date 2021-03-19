@@ -112,18 +112,22 @@ class Preconnect extends Enhancement {
 		foreach ( static::$dependencies as $dep_type => $handles ) {
 			foreach ( $handles as $handle ) {
 				$dependency = Dependency::get( $handle, 'scripts' === $dep_type );
-				$parsed_url = parse_url( $dependency->wp_dep()->src );
-
-				if ( empty( $parsed_url['scheme'] ) ) {
-					trigger_error( sprintf( 'Cannoy apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain.', static::KEY, $handle ) );
-					continue; // @codeCoverageIgnore
-				}
 
 				if (
 					empty( $dependency->enhancements[static::KEY]['always'] )
 					&& !$dependency->is( 'enqueued' )
 				)
 					continue;
+
+				$parsed_url = wp_parse_url( $dependency->wp_dep()->src );
+
+				if (
+					   empty( $parsed_url['scheme'] )
+					|| empty( $parsed_url['host'] )
+				) {
+					trigger_error( sprintf( 'Cannoy apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain <code>%s</code>.', static::KEY, $handle, $dependency->wp_dep()->src ) );
+					continue; // @codeCoverageIgnore
+				}
 
 				$urls[] = sprintf( '%s://%s', $parsed_url['scheme'], $parsed_url['host'] );
 			}

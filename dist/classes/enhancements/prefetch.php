@@ -112,12 +112,6 @@ class Prefetch extends Enhancement {
 		foreach ( static::$dependencies as $dep_type => $handles ) {
 			foreach ( $handles as $handle ) {
 				$dependency = Dependency::get( $handle, 'scripts' === $dep_type );
-				$parsed_url = parse_url( $dependency->wp_dep()->src );
-
-				if ( empty( $parsed_url['scheme'] ) ) {
-					trigger_error( sprintf( 'Cannoy apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain.', static::KEY, $handle ) );
-					continue; // @codeCoverageIgnore
-				}
 
 				if (
 					empty( $dependency->enhancements[static::KEY]['always'] )
@@ -125,7 +119,7 @@ class Prefetch extends Enhancement {
 				)
 					continue;
 
-				$urls[] = sprintf( '%s://%s', $parsed_url['scheme'], $parsed_url['host'] );
+				$urls[] = $dependency->wp_dep()->src;
 			}
 		}
 

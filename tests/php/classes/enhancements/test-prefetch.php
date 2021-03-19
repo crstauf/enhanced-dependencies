@@ -41,11 +41,15 @@ class Test_Enhancement_Prefetch extends \WP_UnitTestCase {
 		$url = $domain . '/test-script.js';
 
 		wp_register_script( $handle, $url );
-		Dependency::get( $handle, true )->set( Prefetch::KEY );
 		wp_enqueue_script( $handle );
 
 		$urls = apply_filters( 'wp_resource_hints', array(), 'prefetch' );
-		$this->assertContains( $domain, $urls );
+		$this->assertNotContains( $url, $urls );
+
+		Dependency::get( $handle, true )->set( Prefetch::KEY );
+
+		$urls = apply_filters( 'wp_resource_hints', array(), 'prefetch' );
+		$this->assertContains( $url, $urls );
 	}
 
 	function test_always() : void {
@@ -60,21 +64,7 @@ class Test_Enhancement_Prefetch extends \WP_UnitTestCase {
 		$urls = apply_filters( 'wp_resource_hints', array(), 'prefetch' );
 
 		$this->assertFalse( $dependency->is( 'enqueued' ) );
-		$this->assertContains( $domain, $urls );
-	}
-
-	function test_error() : void {
-		$handle = uniqid( 'test-script' );
-		$domain = uniqid( 'test-error' ) . '.com';
-		$url = $domain . '/test-script.js';
-
-		wp_register_script( $handle, $url );
-		$dependency = Dependency::get( $handle, true );
-
-		$dependency->set( Prefetch::KEY );
-
-		$this->expectException( \PHPUnit\Framework\Error\Error::class );
-		$urls = apply_filters( 'wp_resource_hints', array(), 'prefetch' );
+		$this->assertContains( $url, $urls );
 	}
 
 }
