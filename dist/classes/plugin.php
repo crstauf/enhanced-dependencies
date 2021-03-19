@@ -92,6 +92,7 @@ class Plugin {
 		require_once static::directory_path() . '/classes/enhancements/defer.php';
 		require_once static::directory_path() . '/classes/enhancements/inline.php';
 		require_once static::directory_path() . '/classes/enhancements/preconnect.php';
+		require_once static::directory_path() . '/classes/enhancements/prefetch.php';
 
 		do_action( 'include_dependency_enhancements' );
 	}

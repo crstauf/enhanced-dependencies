@@ -23,6 +23,7 @@ class Test_Plugin extends \WP_UnitTestCase {
 			'classes/enhancements/defer.php',
 			'classes/enhancements/inline.php',
 			'classes/enhancements/preconnect.php',
+			'classes/enhancements/prefetch.php',
 			'classes/plugin.php',
 			'enhanced-dependencies.php',
 			'functions.php',

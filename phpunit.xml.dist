@@ -27,6 +27,7 @@
 			<file>dist/classes/enhancements/defer.php</file>
 			<file>dist/classes/enhancements/inline.php</file>
 			<file>dist/classes/enhancements/preconnect.php</file>
+			<file>dist/classes/enhancements/prefetch.php</file>
 		</whitelist>
 	</filter>
 
