@@ -34,8 +34,14 @@ class Inline extends Enhancement {
 			return $tag; // @codeCoverageIgnore
 		}
 
-		if ( empty( $content ) )
+		if (
+			'production' !== wp_get_environment_type()
+			&& empty( $content )
+		)
 			$content = '/* empty */';
+
+		if ( empty( $content ) )
+			return '';
 
 		if ( $is_script )
 			return '<script id="' . esc_attr( $handle ) . '-inline-js">' . $content . '</script>';
