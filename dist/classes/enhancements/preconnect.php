@@ -9,7 +9,7 @@ defined( 'WPINC' ) || die(); // @codeCoverageIgnore
 /**
  * Class: Enhanced_Dependencies\Enhancements\Preconnect
  *
- * Expected parameters:
+ * Supported parameters:
  * - always: boolean to preconnect regardless of dependency status
  */
 class Preconnect extends Enhancement {
@@ -35,8 +35,8 @@ class Preconnect extends Enhancement {
 	static function register() : void {
 		parent::register();
 
-		add_action( 'set_dependency_enhancement', array( Preconnect::class, 'action__set_dependency_enhancement' ), 10, 4 );
-		add_filter( 'wp_resource_hints',          array( Preconnect::class, 'filter__wp_resource_hints' ), 10, 2 );
+		add_action( 'set_dependency_enhancement', array( static::class, 'action__set_dependency_enhancement' ), 10, 4 );
+		add_filter( 'wp_resource_hints',          array( static::class, 'filter__wp_resource_hints' ), 10, 2 );
 	}
 
 	/**
@@ -57,6 +57,11 @@ class Preconnect extends Enhancement {
 
 		if ( static::KEY !== $enhancement_key )
 			return;
+
+		if ( did_action( 'wp_head' ) ) {
+			trigger_error( sprintf( 'Too late to apply <code>%s</code> enhancement to <code>%s</code> %s dependency.', static::class, $handle, $is_script ? 'script' : 'style' ) );
+			return;
+		}
 
 		static::add_dependency( $handle, $is_script );
 	}
