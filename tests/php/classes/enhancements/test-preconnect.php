@@ -8,6 +8,7 @@ use Enhanced_Dependencies\Enhancements\Preconnect;
 class Test_Enhancement_Preconnect extends \WP_UnitTestCase {
 
 	function test_register() : void {
+		$this->assertSame( 10, has_action( 'set_dependency_enhancement', array( Preconnect::class, 'action__set_dependency_enhancement' ) ) );
 		$this->assertSame( 10, has_filter( 'wp_resource_hints', array( Preconnect::class, 'filter__wp_resource_hints' ) ) );
 	}
 
