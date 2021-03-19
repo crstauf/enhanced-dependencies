@@ -194,6 +194,31 @@ class Dependency {
 		return wp_style_is( $this->handle, $action );
 	}
 
+	/**
+	 * Get dependency's URL.
+	 *
+	 * @return string
+	 */
+	function get_url() : string {
+		$object = $this->wp_dep();
+		$helper = $this->helper();
+
+		$src = $object->src;
+		$ver = !is_null( $object->ver ) ? $object->ver : '';
+
+		if ( empty( $ver ) )
+			$ver = $helper->default_version;
+
+		if ( isset( $helper->args[ $this->handle ] ) ) {
+			$ver = $ver ? $ver . '&#038;' : '';
+			$ver .= $helper->args[ $this->handle ];
+		}
+
+		$src = add_query_arg( 'ver', $ver, $src );
+
+		return $src;
+	}
+
 }
 
 ?>

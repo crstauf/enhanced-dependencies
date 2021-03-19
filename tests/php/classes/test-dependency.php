@@ -118,6 +118,30 @@ class Test_Dependency extends \WP_UnitTestCase {
 		$this->assertTrue( $dependency->is( 'enqueued' ) );
 	}
 
+	function test_get_url() : void {
+		$test_handle = uniqid( 'test-enhancement-script' );
+		$builtin = wp_scripts()->registered['jquery-core'];
+
+		wp_register_script( $test_handle, $builtin->src, $builtin->deps, $builtin->ver );
+
+		$dependency = new Dependency( $test_handle, true );
+		$this->assertEquals( '/wp-includes/js/jquery/jquery.min.js?ver=3.5.1', $dependency->get_url() );
+
+		$test_handle = uniqid( 'test-enhancement-script' );
+		wp_register_script( $test_handle, $builtin->src, $builtin->deps );
+		$dependency = new Dependency( $test_handle, true );
+
+		$this->assertEquals( '/wp-includes/js/jquery/jquery.min.js?ver=5.7', $dependency->get_url() );
+
+		$test_handle = uniqid( 'test-enhancement-script' );
+		wp_register_script( $test_handle, $builtin->src, $builtin->deps );
+		$rand = rand( 1, 10 );
+		wp_enqueue_script( $test_handle . '?test=' . $rand );
+		$dependency = new Dependency( $test_handle, true );
+
+		$this->assertEquals( '/wp-includes/js/jquery/jquery.min.js?ver=5.7&#038;test=' . $rand, $dependency->get_url() );
+	}
+
 }
 
 ?>
