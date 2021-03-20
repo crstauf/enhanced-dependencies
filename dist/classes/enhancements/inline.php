@@ -41,7 +41,7 @@ class Inline extends Enhancement {
 			$content = '/* empty */';
 
 		if ( empty( $content ) )
-			return '';
+			return ''; // @codeCoverageIgnore
 
 		if ( $is_script )
 			return '<script id="' . esc_attr( $handle ) . '-inline-js">' . $content . '</script>';
