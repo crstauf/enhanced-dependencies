@@ -106,6 +106,8 @@ class Plugin {
 	 * @codeCoverageIgnore
 	 */
 	protected function hooks() : void {
+		add_action( 'set_dependency_enhancement_push', array( $this, 'action__set_dependency_enhancement_push' ), 10, 3 );
+
 		add_filter( 'script_loader_tag', array( $this, 'filter__script_loader_tag' ), 10, 2 );
 		add_filter(  'style_loader_tag', array( $this,  'filter__style_loader_tag' ), 10, 2 );
 	}
@@ -177,6 +179,24 @@ class Plugin {
 		}
 
 		return $tag;
+	}
+
+	/**
+	 * Action: set_dependency_enhancement_push
+	 *
+	 * Magically handle 'push' enhancement.
+	 *
+	 * @param array $options
+	 * @param string $handle
+	 * @param bool $is_script
+	 * @return void
+	 */
+	function action__set_dependency_enhancement_push( array $options, string $handle, bool $is_script ) : void {
+		$options['link'] = false;
+		$options['http_header'] = true;
+
+		$dependency = Dependency::get( $handle, $is_script );
+		$dependency->set( 'preload', $options );
 	}
 
 }
