@@ -10,7 +10,7 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 	function test_register() : void {
 		$this->assertSame( 10, has_action( 'set_dependency_enhancement', array( Preload::class, 'action__set_dependency_enhancement' ) ) );
 		$this->assertSame( 10, has_action( 'send_headers', array( Preload::class, 'action__send_headers' ) ) );
-		$this->assertSame( 10, has_filter( 'wp_resource_hints', array( Preload::class, 'filter__wp_resource_hints' ) ) );
+		$this->assertSame(  5, has_action( 'wp_head', array( Preload::class, 'action__wp_head' ) ) );
 	}
 
 	function test_apply() : void {
@@ -21,20 +21,22 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		$this->assertEquals( $actual, "<link href='' />" );
 	}
 
-	function test_filter_wp_resource_hints_early_returns() : void {
-		$this->assertSame( array(), Preload::filter__wp_resource_hints( array(), uniqid() ) );
-		$this->assertSame( array(), apply_filters( 'wp_resource_hints', array(), uniqid() ) );
-	}
-
 	function test_not_enqueued() : void {
 		$handle = uniqid( 'test-script' );
 		$url = trailingslashit( site_url() ) . 'wp-content/mu-plugins/enhanced-dependencies/tests/test-script.js';
 
 		wp_register_script( $handle, $url );
-		Dependency::get( $handle, true )->set( Preload::KEY );
 
-		$urls = apply_filters( 'wp_resource_hints', array(), 'preload' );
-		$this->assertSame( array(), $urls );
+		$dependency = Dependency::get( $handle, true )->set( Preload::KEY );
+		$dependency->set( Preload::KEY, array( 'http_header' => false ) );
+
+		$this->assertFalse( $dependency->is( 'enqueued' ) );
+
+		ob_start();
+		@do_action( 'wp_head' );
+		$output = ob_get_clean();
+
+		$this->assertFalse( strpos( $output, '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" />' ) );
 	}
 
 	function test_enqueued() : void {
@@ -45,13 +47,16 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		wp_register_script( $handle, $url );
 		wp_enqueue_script( $handle );
 
-		$urls = apply_filters( 'wp_resource_hints', array(), 'preload' );
-		$this->assertNotContains( $url, $urls );
+		$dependency = Dependency::get( $handle, true );
+		$dependency->set( Preload::KEY, array( 'http_header' => false ) );
 
-		Dependency::get( $handle, true )->set( Preload::KEY );
+		$this->assertTrue( $dependency->is( 'enqueued' ) );
 
-		$urls = apply_filters( 'wp_resource_hints', array(), 'preload' );
-		$this->assertContains( $url, $urls );
+		ob_start();
+		@do_action( 'wp_head' );
+		$output = ob_get_clean();
+
+		$this->assertIsInt( strpos( $output, '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" />' ) );
 	}
 
 	function test_always() : void {
@@ -62,11 +67,14 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		wp_register_script( $handle, $url );
 		$dependency = Dependency::get( $handle, true );
 
-		$dependency->set( Preload::KEY, array( 'always' => true ) );
-		$urls = apply_filters( 'wp_resource_hints', array(), 'preload' );
-
+		$dependency->set( Preload::KEY, array( 'always' => true, 'http_header' => false ) );
 		$this->assertFalse( $dependency->is( 'enqueued' ) );
-		$this->assertContains( $url, $urls );
+
+		ob_start();
+		@do_action( 'wp_head' );
+		$output = ob_get_clean();
+
+		$this->assertIsInt( strpos( $output, '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" />' ) );
 	}
 
 	function test_not_link() : void {
@@ -75,12 +83,18 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		$url = $domain . '/test-script.js';
 
 		wp_register_script( $handle, $url );
+		wp_enqueue_script( $handle );
+
 		$dependency = Dependency::get( $handle, true );
-
 		$dependency->set( Preload::KEY, array( 'link' => false ) );
-		$urls = apply_filters( 'wp_resource_hints', array(), 'preload' );
 
-		$this->assertNotContains( $url, $urls );
+		$this->assertTrue( $dependency->is( 'enqueued' ) );
+
+		ob_start();
+		@do_action( 'wp_head' );
+		$output = ob_get_clean();
+
+		$this->assertFalse( strpos( $output, '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" />' ) );
 	}
 
 }
