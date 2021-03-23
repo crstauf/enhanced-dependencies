@@ -133,21 +133,24 @@ class Test_Dependency extends \WP_UnitTestCase {
 		wp_register_script( $test_handle, $builtin->src, $builtin->deps, $builtin->ver );
 
 		$dependency = new Dependency( $test_handle, true );
-		$this->assertEquals( '/wp-includes/js/jquery/jquery.min.js?ver=3.5.1', $dependency->get_url() );
+		$this->assertEquals( '/wp-includes/js/jquery/jquery.min.js?ver=' . $builtin->ver, $dependency->get_url( false ) );
+
+		$dependency = new Dependency( $test_handle, true );
+		$this->assertEquals( trailingslashit( site_url() ) . 'wp-includes/js/jquery/jquery.min.js?ver=' . $builtin->ver, $dependency->get_url( true ) );
 
 		$test_handle = uniqid( 'test-enhancement-script' );
 		wp_register_script( $test_handle, $builtin->src, $builtin->deps );
 		$dependency = new Dependency( $test_handle, true );
 
-		$this->assertEquals( '/wp-includes/js/jquery/jquery.min.js?ver=5.7', $dependency->get_url() );
+		$this->assertEquals( trailingslashit( site_url() ) . 'wp-includes/js/jquery/jquery.min.js?ver=' . $dependency->helper()->default_version, $dependency->get_url() );
 
 		$test_handle = uniqid( 'test-enhancement-script' );
-		wp_register_script( $test_handle, $builtin->src, $builtin->deps );
+		wp_register_script( $test_handle, $builtin->src, $builtin->deps, $builtin->ver );
 		$rand = rand( 1, 10 );
 		wp_enqueue_script( $test_handle . '?test=' . $rand );
 		$dependency = new Dependency( $test_handle, true );
 
-		$this->assertEquals( '/wp-includes/js/jquery/jquery.min.js?ver=5.7&#038;test=' . $rand, $dependency->get_url() );
+		$this->assertEquals( trailingslashit( site_url() ) . 'wp-includes/js/jquery/jquery.min.js?ver=' . $builtin->ver . '&#038;test=' . $rand, $dependency->get_url() );
 	}
 
 }

@@ -136,9 +136,6 @@ class Preload extends Enhancement {
 
 				$src = $dependency->get_url();
 
-				if ( !preg_match( '|^(https?:)?//|', $src ) && ! ( $dependency->helper()->content_url && 0 === strpos( $src, $dependency->helper()->content_url ) ) )
-					$src = $dependency->helper()->base_url . $src;
-
 				echo sprintf( '<link rel="preload" id="' . esc_attr( $handle ) . '-preload-js" href="%s" />', esc_attr( esc_url( $src ) ) ) . "\n";
 			}
 		}

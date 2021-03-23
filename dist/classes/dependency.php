@@ -196,13 +196,21 @@ class Dependency {
 	/**
 	 * Get dependency's URL.
 	 *
+	 * @param bool $absolute Convert relative URL to absolute.
 	 * @return string
 	 */
-	function get_url() : string {
+	function get_url( bool $absolute = true ) : string {
 		$object = $this->wp_dep();
 		$helper = $this->helper();
 
 		$src = $object->src;
+
+		if (
+			$absolute
+			&& $helper->in_default_dir( $src )
+		)
+			$src = $helper->base_url . $src;
+
 		$ver = !is_null( $object->ver ) ? $object->ver : '';
 
 		if ( empty( $ver ) )
