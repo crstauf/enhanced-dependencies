@@ -111,8 +111,6 @@ class Preload extends Enhancement {
 	 * Action: wp_head
 	 *
 	 * @return void
-	 *
-	 * @todo add test for relative URL
 	 */
 	static function action__wp_head() : void {
 		if ( 'wp_head' !== current_action() )
