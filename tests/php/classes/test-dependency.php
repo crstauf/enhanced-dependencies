@@ -30,6 +30,14 @@ class Test_Dependency extends \WP_UnitTestCase {
 		$this->assertInstanceOf( Dependency::class, Dependency::get( $test_handle, true ) );
 	}
 
+	function test_helper() : void {
+		$dependency = Dependency::get( 'jquery-core', true );
+		$this->assertInstanceOf( 'WP_Scripts', $dependency->helper() );
+
+		$dependency = Dependency::get( 'admin-bar', false );
+		$this->assertInstanceOf( 'WP_Styles', $dependency->helper() );
+	}
+
 	function test_set__empty() : void {
 		$dependency = new Dependency;
 		$this->assertInstanceOf( Dependency::class, $dependency->set( 'test-enhancement-key' ) );

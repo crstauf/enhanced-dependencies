@@ -79,10 +79,8 @@ class Dependency {
 	 * Get dependencies helper.
 	 *
 	 * @return WP_Scripts|WP_Styles
-	 *
-	 * @codeCoverageIgnore
 	 */
-	protected function helper() : \WP_Dependencies {
+	function helper() : \WP_Dependencies {
 		return $this->is_script ? wp_scripts() : wp_styles();
 	}
 
