@@ -56,6 +56,9 @@ class Inline extends Enhancement {
 	 * @param string $handle
 	 * @param bool $is_script
 	 * @return string
+	 *
+	 * @todo move into Dependency class
+	 * @todo add test for exteranl dependnecy check
 	 */
 	protected static function get_dependency_path( string $handle, bool $is_script ) : string {
 		$dependency = Dependency::get( $handle, $is_script );
@@ -66,6 +69,11 @@ class Inline extends Enhancement {
 			$path = ABSPATH . $path;
 
 		$path = apply_filters( 'enhanced-dependencies/dependency/path', $path, $handle, $is_script );
+
+		if ( false === strpos( $path, ABSPATH ) ) {
+			trigger_error( sprintf( 'Unable to retrieve code of external dependency <code>%s</code> at <code>%s</code>.', $handle, $dependency->get_url() ) );
+			return '';
+		}
 
 		if ( !file_exists( $path ) ) {
 			trigger_error( sprintf( 'Unable to find <code>%s</code> %s file at <code>%s</code>.', $handle, $is_script ? 'script' : 'stylesheet', $path ) );
