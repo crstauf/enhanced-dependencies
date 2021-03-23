@@ -1,6 +1,7 @@
 <?php
 
 namespace Enhanced_Dependencies\Enhancements;
+use Enhanced_Dependencies\Dependency;
 use Enhanced_Dependencies\Enhancement;
 
 defined( 'WPINC' ) || die(); // @codeCoverageIgnore
@@ -57,10 +58,13 @@ class Inline extends Enhancement {
 	 * @return string
 	 */
 	protected static function get_dependency_path( string $handle, bool $is_script ) : string {
-		$helper = $is_script ? wp_scripts() : wp_styles();
-		$dependency = $helper->registered[ $handle ];
+		$dependency = Dependency::get( $handle, $is_script );
 
-		$path = str_replace( trailingslashit( site_url() ), trailingslashit( ABSPATH ), $dependency->src );
+		$path = str_replace( trailingslashit( site_url() ), trailingslashit( ABSPATH ), $dependency->wp_dep()->src );
+
+		if ( $dependency->helper()->in_default_dir( $dependency->wp_dep()->src ) )
+			$path = ABSPATH . $path;
+
 		$path = apply_filters( 'enhanced-dependencies/dependency/path', $path, $handle, $is_script );
 
 		if ( !file_exists( $path ) ) {

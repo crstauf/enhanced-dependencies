@@ -2,6 +2,7 @@
 
 namespace Enhanced_Dependencies\Tests;
 use Enhanced_Dependencies\Plugin;
+use Enhanced_Dependencies\Dependency;
 use Enhanced_Dependencies\Enhancements\Inline;
 
 class Test_Enhancement_Inline extends \WP_UnitTestCase {
@@ -89,6 +90,23 @@ class Test_Enhancement_Inline extends \WP_UnitTestCase {
 		$actual = Inline::apply( $tag, $handle, false );
 		$this->assertEquals( $actual, $expected );
 		remove_filter( 'enhanced-dependencies/dependency/path', array( $this, 'filter__dependency_path' ) );
+	}
+
+	function test_default_dir() : void {
+		$handle = uniqid( 'test-script' );
+		$url = trailingslashit( site_url() ) . 'wp-content/mu-plugins/enhanced-dependencies/tests/test-script.js';
+
+		wp_register_script( $handle, $url );
+		Dependency::get( $handle, true )->set( 'inline' );
+
+		add_filter( 'enhanced-dependencies/dependency/path', array( $this, 'filter__dependency_path' ) );
+		ob_start();
+		wp_print_scripts( $handle );
+		$tag = ob_get_clean();
+		remove_filter( 'enhanced-dependencies/dependency/path', array( $this, 'filter__dependency_path' ) );
+
+		$expected = '<script id="' . $handle . '-inline-js">/* staging conjoined antitoxic defiling strained broadside */</script>';
+		$this->assertEquals( $expected, $tag );
 	}
 
 }
