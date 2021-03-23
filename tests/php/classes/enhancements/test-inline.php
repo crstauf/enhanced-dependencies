@@ -93,20 +93,24 @@ class Test_Enhancement_Inline extends \WP_UnitTestCase {
 	}
 
 	function test_default_dir() : void {
-		$handle = uniqid( 'test-script' );
-		$url = trailingslashit( site_url() ) . 'wp-content/mu-plugins/enhanced-dependencies/tests/test-script.js';
+		$dependency = Dependency::get( 'jquery-core', true );
 
-		wp_register_script( $handle, $url );
-		Dependency::get( $handle, true )->set( 'inline' );
-
-		add_filter( 'enhanced-dependencies/dependency/path', array( $this, 'filter__dependency_path' ) );
 		ob_start();
-		wp_print_scripts( $handle );
+		wp_print_scripts( 'jquery-core' );
 		$tag = ob_get_clean();
-		remove_filter( 'enhanced-dependencies/dependency/path', array( $this, 'filter__dependency_path' ) );
 
-		$expected = '<script id="' . $handle . '-inline-js">/* staging conjoined antitoxic defiling strained broadside */</script>';
-		$this->assertEquals( $expected, $tag );
+		$this->assertEquals( "<script type='text/javascript' src='" . site_url() . "/wp-includes/js/jquery/jquery.min.js?ver=" . $dependency->wp_dep()->ver . "' id='jquery-core-js'></script>", trim( $tag ) );
+
+		$builtin = $dependency->wp_dep();
+		wp_register_script( 'jquery-core-2', $builtin->src, $builtin->deps, $builtin->ver );
+		$dependency = Dependency::get( 'jquery-core-2', true );
+		$dependency->set( Inline::KEY );
+
+		ob_start();
+		wp_print_scripts( 'jquery-core-2' );
+		$tag = ob_get_clean();
+
+		$this->assertNotEquals( "<script type='text/javascript' src='" . site_url() . "/wp-includes/js/jquery/jquery.min.js?ver=" . $dependency->wp_dep()->ver . "' id='jquery-core-2-js'></script>", trim( $tag ) );
 	}
 
 }
