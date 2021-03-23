@@ -21,6 +21,25 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		$this->assertEquals( $actual, "<link href='' />" );
 	}
 
+	function test_not_wp_action() : void {
+		$handle = uniqid( 'test-script' );
+		$domain = 'http://' . uniqid( 'test-notaction' ) . '.com';
+		$url = $domain . '/test-script.js';
+
+		wp_register_script( $handle, $url );
+		wp_enqueue_script( $handle );
+		$dependency = Dependency::get( $handle, true );
+
+		$dependency->set( Preload::KEY, array( 'http_header' => false ) );
+		$this->assertTrue( $dependency->is( 'enqueued' ) );
+
+		ob_start();
+		Preload::action__wp_head();
+		$output = ob_get_clean();
+
+		$this->assertFalse( strpos( $output, '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" />' ) );
+	}
+
 	function test_not_enqueued() : void {
 		$handle = uniqid( 'test-script' );
 		$url = trailingslashit( site_url() ) . 'wp-content/mu-plugins/enhanced-dependencies/tests/test-script.js';
