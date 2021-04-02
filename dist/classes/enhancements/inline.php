@@ -70,11 +70,6 @@ class Inline extends Enhancement {
 
 		$path = apply_filters( 'enhanced-dependencies/dependency/path', $path, $handle, $is_script );
 
-		if ( false === strpos( $path, ABSPATH ) ) {
-			trigger_error( sprintf( 'Unable to retrieve code of external dependency <code>%s</code> at <code>%s</code>.', $handle, $dependency->get_url() ) );
-			return '';
-		}
-
 		if ( !file_exists( $path ) ) {
 			trigger_error( sprintf( 'Unable to find <code>%s</code> %s file at <code>%s</code>.', $handle, $is_script ? 'script' : 'stylesheet', $path ) );
 			return '';
