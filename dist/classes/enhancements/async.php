@@ -12,6 +12,8 @@ class Async extends Enhancement {
 
 	const KEY = 'async';
 
+	protected static $footer_queue = array();
+
 	/**
 	 * Add asynchronous enhancement.
 	 *
@@ -29,12 +31,38 @@ class Async extends Enhancement {
 		if ( $is_script )
 			return str_replace( '<script ', '<script async ', $tag );
 
+		static::$footer_queue[ $handle ] = trim( $tag );
+
 		$enhanced = str_replace( 'media=\'all\'', 'media=\'print\' onload=\'this.media="all"\'', $tag );
-		return $enhanced . '<noscript>' . trim( $tag ) . '</noscript>' . PHP_EOL;
+		return $enhanced;
+	}
+
+	/**
+	 * Action: wp_print_footer_scripts
+	 *
+	 * Print unenhanced stylesheet tags for noscript context.
+	 *
+	 * @return void
+	 */
+	static function action__wp_print_footer_scripts() : void {
+		if ( 'wp_print_footer_scripts' !== current_action() )
+			return;
+
+		if ( empty( static::$footer_queue ) )
+			return;
+
+		echo '<noscript>' . PHP_EOL;
+
+		foreach ( static::$footer_queue as $handle => $tag )
+			echo $tag . PHP_EOL;
+
+		echo '</noscript>' . PHP_EOL;
 	}
 
 }
 
 Async::register();
+
+add_action( 'wp_print_footer_scripts', array( Async::class, 'action__wp_print_footer_scripts' ) );
 
 ?>
