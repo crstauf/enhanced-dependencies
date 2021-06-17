@@ -29,11 +29,14 @@ class Async extends Enhancement {
 	 */
 	static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
 		if ( $is_script )
-			return str_replace( '<script ', '<script async ', $tag );
+			return str_replace( '<script src=', '<script async src=', $tag );
 
-		static::$footer_queue[ $handle ] = trim( $tag );
-
+		$id = sprintf( '%s-css', esc_attr( $handle ) );
+		$noscript = str_replace( $id, $id . '-noscript', $tag );
 		$enhanced = str_replace( 'media=\'all\'', 'media=\'print\' onload=\'this.media="all"\'', $tag );
+
+		static::$footer_queue[ $handle ] = trim( $noscript );
+
 		return $enhanced;
 	}
 
@@ -53,7 +56,7 @@ class Async extends Enhancement {
 
 		echo '<noscript>' . PHP_EOL;
 
-		foreach ( static::$footer_queue as $handle => $tag )
+		foreach ( static::$footer_queue as $tag )
 			echo $tag . PHP_EOL;
 
 		echo '</noscript>' . PHP_EOL;

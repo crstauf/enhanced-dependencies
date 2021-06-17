@@ -25,7 +25,7 @@ class Defer extends Enhancement {
 		if ( !$is_script )
 			return $tag; // @codeCoverageIgnore
 
-		return str_replace( '<script ', '<script defer ', $tag );
+		return str_replace( '<script src=', '<script defer src=', $tag );
 	}
 
 }
