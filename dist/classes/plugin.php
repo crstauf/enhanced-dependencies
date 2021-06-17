@@ -14,6 +14,7 @@ class Plugin {
 	/**
 	 * Initialize.
 	 *
+	 * @param string $file
 	 * @uses static::instance()
 	 * @return void
 	 *
@@ -27,7 +28,7 @@ class Plugin {
 
 		static::$file = $file;
 
-		$instance = static::instance();
+		static::instance();
 	}
 
 	/**
@@ -87,6 +88,7 @@ class Plugin {
 		require_once static::directory_path() . 'classes/dependency.php';
 		require_once static::directory_path() . 'classes/enhancements-manager.php';
 		require_once static::directory_path() . 'classes/enhancement.php';
+		include_once static::directory_path() . 'query-monitor/query-monitor.php';
 
 		require_once static::directory_path() . '/classes/enhancements/async.php';
 		require_once static::directory_path() . '/classes/enhancements/defer.php';
@@ -108,8 +110,8 @@ class Plugin {
 	protected function hooks() : void {
 		add_action( 'set_dependency_enhancement_push', array( $this, 'action__set_dependency_enhancement_push' ), 10, 3 );
 
-		add_filter( 'script_loader_tag', array( $this, 'filter__script_loader_tag' ), 10, 2 );
-		add_filter(  'style_loader_tag', array( $this,  'filter__style_loader_tag' ), 10, 2 );
+		add_filter( 'script_loader_tag', array( $this, 'filter__script_loader_tag' ), 1000, 2 );
+		add_filter(  'style_loader_tag', array( $this,  'filter__style_loader_tag' ), 1000, 2 );
 	}
 
 	/**

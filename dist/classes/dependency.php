@@ -139,7 +139,8 @@ class Dependency {
 		unset( $this->enhancements[ $enhancement_key ] );
 		$this->save();
 
-		do_action( 'removed_dependency_enhancement', $enhancement_key, $this->handle, $this->is_script );
+		do_action( 'removed_dependency_enhancement',   $enhancement_key, $this->handle, $this->is_script );
+		do_action( 'removed_dependency_enhancement_' . $enhancement_key, $this->handle, $this->is_script );
 
 		return $this;
 	}
