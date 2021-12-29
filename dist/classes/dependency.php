@@ -212,9 +212,9 @@ class Dependency {
 		)
 			$src = $helper->base_url . $src;
 
-		$ver = !is_null( $object->ver ) ? $object->ver : '';
+		$ver = $object->ver;
 
-		if ( empty( $ver ) )
+		if ( !is_null( $ver ) && empty( $ver ) )
 			$ver = $helper->default_version;
 
 		if ( isset( $helper->args[ $this->handle ] ) ) {
