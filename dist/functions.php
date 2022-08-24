@@ -40,7 +40,7 @@ if ( !function_exists( 'wp_enhance_style' ) ) {
 
 }
 
-if ( !function_exists( 'wp_dehance_scripts' ) ) {
+if ( !function_exists( 'wp_dehance_script' ) ) {
 
 	/**
 	 * Dehance registered script.
