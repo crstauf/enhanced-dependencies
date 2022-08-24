@@ -137,7 +137,7 @@ class Preload extends Enhancement {
 				printf( '<link rel="preload" id="%s-preload-%s" href="%s" as="%s" />' . PHP_EOL,
 					esc_attr( $handle ),
 					esc_attr( 'scripts' === $dep_type ? 'js' : 'css' ),
-					esc_attr( esc_url( $src ) ),
+					$src,
 					esc_attr( 'scripts' === $dep_type ? 'script' : 'style' )
 				);
 			}
