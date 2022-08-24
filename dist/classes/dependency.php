@@ -224,7 +224,7 @@ class Dependency {
 
 		$src = add_query_arg( 'ver', $ver, $src );
 
-		return $src;
+		return urldecode_deep( $src );
 	}
 
 }
