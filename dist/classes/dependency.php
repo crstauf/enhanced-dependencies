@@ -222,9 +222,9 @@ class Dependency {
 			$src = $helper->base_url . $src;
 		}
 
-		$ver = ! is_null( $object->ver ) ? $object->ver : '';
+		$ver = $object->ver;
 
-		if ( empty( $ver ) ) {
+		if ( ! is_null( $ver ) && empty( $ver ) )
 			$ver = $helper->default_version;
 		}
 
@@ -235,7 +235,7 @@ class Dependency {
 
 		$src = add_query_arg( 'ver', $ver, $src );
 
-		return $src;
+		return urldecode_deep( $src );
 	}
 
 }

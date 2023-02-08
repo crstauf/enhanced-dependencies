@@ -31,6 +31,10 @@ class Collector extends \QM_Collector {
 	}
 
 	public function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
+		if ( did_action( 'qm/cease' ) ) {
+			return;
+		}
+
 		$compare = $is_script ? 'scripts' : 'styles';
 
 		if ( $this->get_dependency_type() !== $compare ) {
@@ -45,6 +49,10 @@ class Collector extends \QM_Collector {
 	}
 
 	public function action__removed_dependency_enhancement( string $enhancement_key, string $handle, bool $is_script ) : void {
+		if ( did_action( 'qm/cease' ) ) {
+			return;
+		}
+
 		$compare = $is_script ? 'scripts' : 'styles';
 
 		if ( $this->get_dependency_type() !== $compare ) {

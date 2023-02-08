@@ -149,7 +149,7 @@ class Preload extends Enhancement {
 
 				$src = $dependency->get_url();
 
-				echo sprintf(
+				printf(
 					'<link rel="preload" id="%s-preload-%s" href="%s" as="%s" />',
 					\esc_attr( $handle ),
 					\esc_attr( 'scripts' === $dep_type ? 'js' : 'css' ),

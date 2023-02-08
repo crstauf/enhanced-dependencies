@@ -40,7 +40,7 @@ if ( ! function_exists( 'wp_enhance_style' ) ) {
 
 }
 
-if ( ! function_exists( 'wp_dehance_scripts' ) ) {
+if ( ! function_exists( 'wp_dehance_script' ) ) {
 
 	/**
 	 * Dehance registered script.
@@ -166,4 +166,5 @@ if ( ! function_exists( 'wp_enqueue_enhanced_style' ) ) {
 		wp_enqueue_style( $handle, $src, $deps, $ver, $media );
 		return Enhanced_Dependencies\Dependency::get( $handle, false );
 	}
+
 }
