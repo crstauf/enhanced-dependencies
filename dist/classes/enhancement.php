@@ -25,7 +25,7 @@ abstract class Enhancement {
 	 * @uses Enhancements_Manager::register()
 	 * @return void
 	 */
-	static function register() : void {
+	public static function register() : void {
 		Enhancements_Manager::register( static::KEY, static::class );
 	}
 
@@ -38,8 +38,6 @@ abstract class Enhancement {
 	 * @param array $options
 	 * @return string
 	 */
-	abstract static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string;
+	abstract public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string;
 
 }
-
-?>

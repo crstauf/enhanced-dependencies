@@ -19,16 +19,9 @@
 
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<file>dist/functions.php</file>
-			<file>dist/classes/plugin.php</file>
-			<file>dist/classes/dependency.php</file>
-			<file>dist/classes/enhancements-manager.php</file>
-			<file>dist/classes/enhancements/async.php</file>
-			<file>dist/classes/enhancements/defer.php</file>
-			<file>dist/classes/enhancements/inline.php</file>
-			<file>dist/classes/enhancements/preconnect.php</file>
-			<file>dist/classes/enhancements/prefetch.php</file>
-			<file>dist/classes/enhancements/preload.php</file>
+			<directory suffix=".php">dist</directory>
+			<exclude>
+				<directory>dist/query-monitor</directory>
 		</whitelist>
 	</filter>
 

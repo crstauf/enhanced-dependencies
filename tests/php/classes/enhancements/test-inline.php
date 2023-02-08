@@ -8,7 +8,7 @@ use Enhanced_Dependencies\Enhancements\Inline;
 class Test_Enhancement_Inline extends \WP_UnitTestCase {
 
 	function filter__dependency_path( string $path ) : string {
-		$search = trailingslashit( ABSPATH ) . 'wp-content/mu-plugins/enhanced-dependencies/';
+		$search  = trailingslashit( ABSPATH ) . 'wp-content/mu-plugins/enhanced-dependencies/';
 		$replace = Plugin::directory_path();
 		$replace = str_replace( '/dist', '', $replace );
 

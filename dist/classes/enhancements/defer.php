@@ -21,9 +21,10 @@ class Defer extends Enhancement {
 	 * @param array $options
 	 * @return string
 	 */
-	static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
-		if ( !$is_script )
+	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
+		if ( ! $is_script ) {
 			return $tag; // @codeCoverageIgnore
+		}
 
 		return str_replace( '<script src=', '<script defer src=', $tag );
 	}
@@ -31,5 +32,3 @@ class Defer extends Enhancement {
 }
 
 Defer::register();
-
-?>

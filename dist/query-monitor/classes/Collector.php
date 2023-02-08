@@ -23,36 +23,41 @@ class Collector extends \QM_Collector {
 			return;
 		}
 
-		add_action(     'set_dependency_enhancement', array( $this,     'action__set_dependency_enhancement' ), 10, 4 );
+		add_action( 'set_dependency_enhancement', array( $this, 'action__set_dependency_enhancement' ), 10, 4 );
 		add_action( 'removed_dependency_enhancement', array( $this, 'action__removed_dependency_enhancement' ), 10, 3 );
 	}
 
-	function process() : void {}
+	public function process() : void {
+	}
 
-	function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
+	public function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
 		$compare = $is_script ? 'scripts' : 'styles';
 
-		if ( $this->get_dependency_type() !== $compare )
+		if ( $this->get_dependency_type() !== $compare ) {
 			return;
+		}
 
-		if ( !array_key_exists( $handle, $this->data['assets'] ) )
+		if ( ! array_key_exists( $handle, $this->data['assets'] ) ) {
 			$this->data['assets'][ $handle ] = array();
+		}
 
 		$this->data['assets'][ $handle ][ $enhancement_key ] = $options;
 	}
 
-	function action__removed_dependency_enhancement( string $enhancement_key, string $handle, bool $is_script ) : void {
+	public function action__removed_dependency_enhancement( string $enhancement_key, string $handle, bool $is_script ) : void {
 		$compare = $is_script ? 'scripts' : 'styles';
 
-		if ( $this->get_dependency_type() !== $compare )
+		if ( $this->get_dependency_type() !== $compare ) {
 			return;
+		}
 
 		unset( $this->data['assets'][ $handle ][ $enhancement_key ] );
 
-		if ( empty( $this->data['assets'][ $handle ] ) )
-			unset( $this->data['assets'][ $handle ] );
+		if ( ! empty( $this->data['assets'][ $handle ] ) ) {
+			return;
+		}
+
+		unset( $this->data['assets'][ $handle ] );
 	}
 
 }
-
-?>

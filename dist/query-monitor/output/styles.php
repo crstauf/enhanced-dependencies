@@ -26,5 +26,3 @@ class Output_Html_Styles extends Output_Html {
 	}
 
 }
-
-?>

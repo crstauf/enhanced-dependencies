@@ -5,5 +5,3 @@
  * and wp_dependencies_unique_hosts() do all the work: this file
  * remains as a reminder.
  */
-
-?>

@@ -17,5 +17,3 @@ defined( 'WPINC' ) || die();
 require_once 'classes/plugin.php';
 
 \Enhanced_Dependencies\Plugin::init( __FILE__ );
-
-?>

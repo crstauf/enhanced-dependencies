@@ -33,16 +33,18 @@ class Dependency {
 	 * @param bool $is_script
 	 * @return self
 	 */
-	static function get( string $handle, bool $is_script ) : self {
+	public static function get( string $handle, bool $is_script ) : self {
 		$helper = $is_script ? wp_scripts() : wp_styles();
 
-		if ( !$helper->query( $handle ) )
+		if ( ! $helper->query( $handle ) ) {
 			return new self;
+		}
 
 		$enhancements = $helper->get_data( $handle, static::EXTRA_DATA_KEY );
 
-		if ( is_a( $enhancements, static::class ) )
+		if ( is_a( $enhancements, static::class ) ) {
 			return $enhancements;
+		}
 
 		$enhancements = new self( $handle, $is_script );
 		$enhancements->save();
@@ -59,8 +61,8 @@ class Dependency {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	function __construct( string $handle = '', bool $is_script = false ) {
-		$this->handle = $handle;
+	public function __construct( string $handle = '', bool $is_script = false ) {
+		$this->handle    = $handle;
 		$this->is_script = $is_script;
 	}
 
@@ -71,7 +73,7 @@ class Dependency {
 	 * @param string $property
 	 * @return mixed
 	 */
-	function __get( string $property ) {
+	public function __get( string $property ) {
 		return $this->$property;
 	}
 
@@ -80,7 +82,7 @@ class Dependency {
 	 *
 	 * @return WP_Scripts|WP_Styles
 	 */
-	function helper() : \WP_Dependencies {
+	public function helper() : \WP_Dependencies {
 		return $this->is_script ? wp_scripts() : wp_styles();
 	}
 
@@ -92,8 +94,9 @@ class Dependency {
 	 * @codeCoverageIgnore
 	 */
 	protected function save() : void {
-		if ( empty( $this->handle ) )
+		if ( empty( $this->handle ) ) {
 			return;
+		}
 
 		$helper = $this->helper();
 		$helper->add_data( $this->handle, static::EXTRA_DATA_KEY, $this );
@@ -106,14 +109,15 @@ class Dependency {
 	 * @param array $options
 	 * @return self
 	 */
-	function set( string $enhancement_key, array $options = array() ) : self {
-		if ( empty( $this->handle ) )
+	public function set( string $enhancement_key, array $options = array() ) : self {
+		if ( empty( $this->handle ) ) {
 			return $this;
+		}
 
 		$this->enhancements[ $enhancement_key ] = $options;
 		$this->save();
 
-		do_action( 'set_dependency_enhancement',   $enhancement_key, $options, $this->handle, $this->is_script );
+		do_action( 'set_dependency_enhancement', $enhancement_key, $options, $this->handle, $this->is_script );
 		do_action( 'set_dependency_enhancement_' . $enhancement_key, $options, $this->handle, $this->is_script );
 
 		return $this;
@@ -125,9 +129,10 @@ class Dependency {
 	 * @param null|string $enhancement_key
 	 * @return self
 	 */
-	function remove( string $enhancement_key = null ) : self {
-		if ( empty( $this->handle ) )
+	public function remove( string $enhancement_key = null ) : self {
+		if ( empty( $this->handle ) ) {
 			return $this;
+		}
 
 		if ( is_null( $enhancement_key ) ) {
 			$this->enhancements = array();
@@ -139,7 +144,7 @@ class Dependency {
 		unset( $this->enhancements[ $enhancement_key ] );
 		$this->save();
 
-		do_action( 'removed_dependency_enhancement',   $enhancement_key, $this->handle, $this->is_script );
+		do_action( 'removed_dependency_enhancement', $enhancement_key, $this->handle, $this->is_script );
 		do_action( 'removed_dependency_enhancement_' . $enhancement_key, $this->handle, $this->is_script );
 
 		return $this;
@@ -151,9 +156,10 @@ class Dependency {
 	 * @param null|string $enhancement_key
 	 * @return bool
 	 */
-	function has( string $enhancement_key = null ) : bool {
-		if ( is_null( $enhancement_key ) )
-			return !empty( $this->enhancements );
+	public function has( string $enhancement_key = null ) : bool {
+		if ( is_null( $enhancement_key ) ) {
+			return ! empty( $this->enhancements );
+		}
 
 		return array_key_exists( $enhancement_key, $this->enhancements );
 	}
@@ -163,18 +169,20 @@ class Dependency {
 	 *
 	 * @return bool|_WP_Dependency
 	 */
-	function wp_dep() {
+	public function wp_dep() {
 		if (
 			$this->is_script
-			&& !wp_script_is( $this->handle, 'registered' )
-		)
+			&& ! wp_script_is( $this->handle, 'registered' )
+		) {
 			return false;
+		}
 
 		if (
-			!$this->is_script
-			&& !wp_style_is( $this->handle, 'registered' )
-		)
+			! $this->is_script
+			&& ! wp_style_is( $this->handle, 'registered' )
+		) {
 			return false;
+		}
 
 		return $this->helper()->registered[ $this->handle ];
 	}
@@ -187,9 +195,10 @@ class Dependency {
 	 * @uses wp_style_is()
 	 * @return bool
 	 */
-	function is( string $action ) : bool {
-		if ( $this->is_script )
+	public function is( string $action ) : bool {
+		if ( $this->is_script ) {
 			return wp_script_is( $this->handle, $action );
+		}
 
 		return wp_style_is( $this->handle, $action );
 	}
@@ -200,7 +209,7 @@ class Dependency {
 	 * @param bool $absolute Convert relative URL to absolute.
 	 * @return string
 	 */
-	function get_url( bool $absolute = true ) : string {
+	public function get_url( bool $absolute = true ) : string {
 		$object = $this->wp_dep();
 		$helper = $this->helper();
 
@@ -209,16 +218,18 @@ class Dependency {
 		if (
 			$absolute
 			&& $helper->in_default_dir( $src )
-		)
+		) {
 			$src = $helper->base_url . $src;
+		}
 
-		$ver = !is_null( $object->ver ) ? $object->ver : '';
+		$ver = ! is_null( $object->ver ) ? $object->ver : '';
 
-		if ( empty( $ver ) )
+		if ( empty( $ver ) ) {
 			$ver = $helper->default_version;
+		}
 
 		if ( isset( $helper->args[ $this->handle ] ) ) {
-			$ver = $ver ? $ver . '&#038;' : '';
+			$ver  = $ver ? $ver . '&#038;' : '';
 			$ver .= $helper->args[ $this->handle ];
 		}
 
@@ -228,5 +239,3 @@ class Dependency {
 	}
 
 }
-
-?>

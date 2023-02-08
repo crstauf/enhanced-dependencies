@@ -21,11 +21,12 @@ class Integrate {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function init() : void {
+	public static function init() : void {
 		$once = false;
 
-		if ( $once )
+		if ( $once ) {
 			return;
+		}
 
 		static::instance();
 	}
@@ -40,8 +41,9 @@ class Integrate {
 	protected static function instance() : self {
 		static $instance = null;
 
-		if ( is_null( $instance ) )
+		if ( is_null( $instance ) ) {
 			$instance = new self;
+		}
 
 		return $instance;
 	}
@@ -50,14 +52,12 @@ class Integrate {
 	 * Construct.
 	 */
 	protected function __construct() {
-
-		add_filter( 'qm/collectors',         array( $this, 'filter__qm_collectors' ) );
+		add_filter( 'qm/collectors', array( $this, 'filter__qm_collectors' ) );
 		add_filter( 'qm/output/panel_menus', array( $this, 'filter__qm_output_panel_menus' ) );
-		add_filter( 'qm/outputter/html',     array( $this, 'filter__qm_outputter_html' ), 80 );
+		add_filter( 'qm/outputter/html', array( $this, 'filter__qm_outputter_html' ), 80 );
 
 		add_filter( 'qm/collect/concerned_actions/assets_scripts', array( $this, 'filter__qm_collect_concerned_actions' ) );
-		add_filter( 'qm/collect/concerned_actions/assets_styles',  array( $this, 'filter__qm_collect_concerned_actions' ) );
-
+		add_filter( 'qm/collect/concerned_actions/assets_styles', array( $this, 'filter__qm_collect_concerned_actions' ) );
 	}
 
 	/**
@@ -68,7 +68,7 @@ class Integrate {
 	 * @param \QM_Collector[] $collectors
 	 * @return \QM_Collector[]
 	 */
-	function filter__qm_collectors( array $collectors ) : array {
+	public function filter__qm_collectors( array $collectors ) : array {
 		require_once Plugin::directory_path() . 'query-monitor/classes/Collector.php';
 		require_once Plugin::directory_path() . 'query-monitor/collectors/scripts.php';
 		require_once Plugin::directory_path() . 'query-monitor/collectors/styles.php';
@@ -87,21 +87,25 @@ class Integrate {
 	 * @param array $panel_menus
 	 * @return array
 	 */
-	function filter__qm_output_panel_menus( array $panel_menus ) : array {
-		foreach ( array( 'qm-assets_scripts', 'qm-assets_styles' ) as $tab )
-			if ( !array_key_exists( 'children', $panel_menus[$tab] ) )
-				$panel_menus[$tab]['children'] = array();
+	public function filter__qm_output_panel_menus( array $panel_menus ) : array {
+		foreach ( array( 'qm-assets_scripts', 'qm-assets_styles' ) as $tab ) {
+			if ( ! array_key_exists( 'children', $panel_menus[ $tab ] ) ) {
+				$panel_menus[ $tab ]['children'] = array();
+			}
+		}
 
 		$collector = \QM_Collectors::get( 'enhanced_scripts' );
+
 		$panel_menus['qm-assets_scripts']['children']['qm-enhanced_scripts'] = array(
 			'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()['assets'] ) ),
-			'href' => '#qm-enhanced_scripts',
+			'href'  => '#qm-enhanced_scripts',
 		);
 
 		$collector = \QM_Collectors::get( 'enhanced_styles' );
+
 		$panel_menus['qm-assets_styles']['children']['qm-enhanced_styles'] = array(
 			'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()['assets'] ) ),
-			'href' => '#qm-enhanced_styles',
+			'href'  => '#qm-enhanced_styles',
 		);
 
 		return $panel_menus;
@@ -116,13 +120,13 @@ class Integrate {
 	 * @param \QM_Output[] $outputters
 	 * @return \QM_Output[]
 	 */
-	function filter__qm_outputter_html( array $outputters ) : array {
+	public function filter__qm_outputter_html( array $outputters ) : array {
 		require_once Plugin::directory_path() . 'query-monitor/classes/Output.php';
 		require_once Plugin::directory_path() . 'query-monitor/output/scripts.php';
 		require_once Plugin::directory_path() . 'query-monitor/output/styles.php';
 
 		$outputters['enhanced_scripts'] = new Output_Html_Scripts( \QM_Collectors::get( 'enhanced_scripts' ) );
-		$outputters['enhanced_styles']  = new Output_Html_Styles(  \QM_Collectors::get( 'enhanced_styles'  ) );
+		$outputters['enhanced_styles']  = new Output_Html_Styles( \QM_Collectors::get( 'enhanced_styles' ) );
 
 		return $outputters;
 	}
@@ -136,7 +140,7 @@ class Integrate {
 	 * @uses Enhanced_Dependencies\Enhancements_Manager::get()
 	 * @return string
 	 */
-	function filter__qm_collect_concerned_actions( array $actions ) {
+	public function filter__qm_collect_concerned_actions( array $actions ) {
 		$actions[] = 'include_dependency_enhancements';
 		$actions[] = 'set_dependency_enhancement';
 		$actions[] = 'removed_dependency_enhancement';
@@ -152,5 +156,3 @@ class Integrate {
 }
 
 Integrate::init();
-
-?>

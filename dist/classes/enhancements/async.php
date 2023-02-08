@@ -27,11 +27,12 @@ class Async extends Enhancement {
 	 * @param array $options
 	 * @return string
 	 */
-	static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
-		if ( $is_script )
+	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
+		if ( $is_script ) {
 			return str_replace( '<script src=', '<script async src=', $tag );
+		}
 
-		$id = sprintf( '%s-css', esc_attr( $handle ) );
+		$id       = sprintf( '%s-css', esc_attr( $handle ) );
 		$noscript = str_replace( $id, $id . '-noscript', $tag );
 		$enhanced = str_replace( 'media=\'all\'', 'media=\'print\' onload=\'this.media="all"\'', $tag );
 
@@ -47,17 +48,20 @@ class Async extends Enhancement {
 	 *
 	 * @return void
 	 */
-	static function action__wp_print_footer_scripts() : void {
-		if ( 'wp_print_footer_scripts' !== current_action() )
+	public static function action__wp_print_footer_scripts() : void {
+		if ( 'wp_print_footer_scripts' !== current_action() ) {
 			return;
+		}
 
-		if ( empty( static::$footer_queue ) )
+		if ( empty( static::$footer_queue ) ) {
 			return;
+		}
 
 		echo '<noscript>' . PHP_EOL;
 
-		foreach ( static::$footer_queue as $tag )
+		foreach ( static::$footer_queue as $tag ) {
 			echo $tag . PHP_EOL;
+		}
 
 		echo '</noscript>' . PHP_EOL;
 	}
@@ -67,5 +71,3 @@ class Async extends Enhancement {
 Async::register();
 
 add_action( 'wp_print_footer_scripts', array( Async::class, 'action__wp_print_footer_scripts' ) );
-
-?>

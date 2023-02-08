@@ -26,5 +26,3 @@ class Output_Html_Scripts extends Output_Html {
 	}
 
 }
-
-?>

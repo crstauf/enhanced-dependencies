@@ -16,5 +16,3 @@ class Collector_Scripts extends Collector {
 	}
 
 }
-
-?>

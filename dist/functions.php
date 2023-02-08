@@ -5,7 +5,7 @@
 
 defined( 'WPINC' ) || die();
 
-if ( !function_exists( 'wp_enhance_script' ) ) {
+if ( ! function_exists( 'wp_enhance_script' ) ) {
 
 	/**
 	 * Enhance registered script.
@@ -23,7 +23,7 @@ if ( !function_exists( 'wp_enhance_script' ) ) {
 }
 
 
-if ( !function_exists( 'wp_enhance_style' ) ) {
+if ( ! function_exists( 'wp_enhance_style' ) ) {
 
 	/**
 	 * Enhance registered stylesheet.
@@ -40,7 +40,7 @@ if ( !function_exists( 'wp_enhance_style' ) ) {
 
 }
 
-if ( !function_exists( 'wp_dehance_scripts' ) ) {
+if ( ! function_exists( 'wp_dehance_scripts' ) ) {
 
 	/**
 	 * Dehance registered script.
@@ -56,7 +56,7 @@ if ( !function_exists( 'wp_dehance_scripts' ) ) {
 
 }
 
-if ( !function_exists( 'wp_dehance_style' ) ) {
+if ( ! function_exists( 'wp_dehance_style' ) ) {
 
 	/**
 	 * Dehance registered stylesheet.
@@ -72,7 +72,7 @@ if ( !function_exists( 'wp_dehance_style' ) ) {
 
 }
 
-if ( !function_exists( 'wp_register_enhanced_script' ) ) {
+if ( ! function_exists( 'wp_register_enhanced_script' ) ) {
 
 	/**
 	 * Register script and return Dependency object.
@@ -96,7 +96,7 @@ if ( !function_exists( 'wp_register_enhanced_script' ) ) {
 	}
 }
 
-if ( !function_exists( 'wp_enqueue_enhanced_script' ) ) {
+if ( ! function_exists( 'wp_enqueue_enhanced_script' ) ) {
 
 	/**
 	 * Enqueue script and return Dependency object.
@@ -120,7 +120,7 @@ if ( !function_exists( 'wp_enqueue_enhanced_script' ) ) {
 	}
 }
 
-if ( !function_exists( 'wp_register_enhanced_style' ) ) {
+if ( ! function_exists( 'wp_register_enhanced_style' ) ) {
 
 	/**
 	 * Register stylesheet and return Dependency object.
@@ -144,7 +144,7 @@ if ( !function_exists( 'wp_register_enhanced_style' ) ) {
 	}
 }
 
-if ( !function_exists( 'wp_enqueue_enhanced_style' ) ) {
+if ( ! function_exists( 'wp_enqueue_enhanced_style' ) ) {
 
 	/**
 	 * Enqueue stylesheet and return Dependency object.
@@ -167,5 +167,3 @@ if ( !function_exists( 'wp_enqueue_enhanced_style' ) ) {
 		return Enhanced_Dependencies\Dependency::get( $handle, false );
 	}
 }
-
-?>

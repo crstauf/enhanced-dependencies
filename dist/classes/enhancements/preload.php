@@ -34,12 +34,12 @@ class Preload extends Enhancement {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function register() : void {
+	public static function register() : void {
 		parent::register();
 
 		add_action( 'set_dependency_enhancement', array( static::class, 'action__set_dependency_enhancement' ), 10, 4 );
-		add_action( 'send_headers',               array( static::class, 'action__send_headers' ) );
-		add_action( 'wp_head',                    array( static::class, 'action__wp_head' ), 5 );
+		add_action( 'send_headers', array( static::class, 'action__send_headers' ) );
+		add_action( 'wp_head', array( static::class, 'action__wp_head' ), 5 );
 	}
 
 	/**
@@ -54,15 +54,23 @@ class Preload extends Enhancement {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
-		if ( 'set_dependency_enhancement' !== current_action() )
+	public static function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
+		if ( 'set_dependency_enhancement' !== current_action() ) {
 			return;
+		}
 
-		if ( static::KEY !== $enhancement_key )
+		if ( static::KEY !== $enhancement_key ) {
 			return;
+		}
 
 		if ( did_action( 'wp_head' ) ) {
-			trigger_error( sprintf( 'Too late to apply <code>%s</code> enhancement to <code>%s</code> %s dependency.', static::class, $handle, $is_script ? 'script' : 'style' ) );
+			trigger_error( sprintf(
+				'Too late to apply <code>%s</code> enhancement to <code>%s</code> %s dependency.',
+				static::class,
+				$handle,
+				$is_script ? 'script' : 'style'
+			) );
+
 			return;
 		}
 
@@ -76,27 +84,31 @@ class Preload extends Enhancement {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function action__send_headers() : void {
-		if ( 'send_headers' !== current_action() )
+	public static function action__send_headers() : void {
+		if ( 'send_headers' !== current_action() ) {
 			return;
+		}
 
 		foreach ( static::$dependencies as $dep_type => $handles ) {
 			foreach ( $handles as $index => $handle ) {
 				$dependency = Dependency::get( $handle, 'scripts' === $dep_type );
 
 				if (
-					array_key_exists( 'http_header', $dependency->enhancements[static::KEY] )
-					&& false === $dependency->enhancements[static::KEY]['http_header']
-				)
+					array_key_exists( 'http_header', $dependency->enhancements[ static::KEY ] )
+					&& false === $dependency->enhancements[ static::KEY ]['http_header']
+				) {
 					continue;
+				}
 
 				if (
-					empty( $dependency->enhancements[static::KEY]['always'] )
-					&& !$dependency->is( 'enqueued' )
-				)
+					empty( $dependency->enhancements[ static::KEY ]['always'] )
+					&& ! $dependency->is( 'enqueued' )
+				) {
 					continue;
+				}
 
-				$header = sprintf( 'Link: <%s>; rel=preload; as=%s',
+				$header = sprintf(
+					'Link: <%s>; rel=preload; as=%s',
 					$dependency->get_url(),
 					'scripts' === $dep_type ? 'script' : 'style'
 				);
@@ -112,32 +124,37 @@ class Preload extends Enhancement {
 	 *
 	 * @return void
 	 */
-	static function action__wp_head() : void {
-		if ( 'wp_head' !== current_action() )
+	public static function action__wp_head() : void {
+		if ( 'wp_head' !== current_action() ) {
 			return;
+		}
 
 		foreach ( static::$dependencies as $dep_type => $handles ) {
 			foreach ( $handles as $handle ) {
 				$dependency = Dependency::get( $handle, 'scripts' === $dep_type );
 
 				if (
-					empty( $dependency->enhancements[static::KEY]['always'] )
-					&& !$dependency->is( 'enqueued' )
-				)
+					empty( $dependency->enhancements[ static::KEY ]['always'] )
+					&& ! $dependency->is( 'enqueued' )
+				) {
 					continue;
+				}
 
 				if (
-					array_key_exists( 'link', $dependency->enhancements[static::KEY] )
-					&& false === $dependency->enhancements[static::KEY]['link']
-				)
+					array_key_exists( 'link', $dependency->enhancements[ static::KEY ] )
+					&& false === $dependency->enhancements[ static::KEY ]['link']
+				) {
 					continue;
+				}
 
 				$src = $dependency->get_url();
 
-				echo sprintf( '<link rel="preload" id="' . esc_attr( $handle ) . '-preload-%s" href="%s" as="%s" />',
-					esc_attr( 'scripts' === $dep_type ? 'js' : 'css' ),
-					esc_attr( esc_url( $src ) ),
-					esc_attr( 'scripts' === $dep_type ? 'script' : 'style' )
+				echo sprintf(
+					'<link rel="preload" id="%s-preload-%s" href="%s" as="%s" />',
+					\esc_attr( $handle ),
+					\esc_attr( 'scripts' === $dep_type ? 'js' : 'css' ),
+					\esc_attr( esc_url( $src ) ),
+					\esc_attr( 'scripts' === $dep_type ? 'script' : 'style' )
 				) . "\n";
 			}
 		}
@@ -154,6 +171,7 @@ class Preload extends Enhancement {
 	 */
 	protected static function add_dependency( string $handle, bool $is_script ) : void {
 		$key = $is_script ? 'scripts' : 'styles';
+
 		static::$dependencies[ $key ][] = $handle;
 	}
 
@@ -166,12 +184,10 @@ class Preload extends Enhancement {
 	 * @param array $options
 	 * @return string
 	 */
-	static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
+	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
 		return $tag;
 	}
 
 }
 
 Preload::register();
-
-?>

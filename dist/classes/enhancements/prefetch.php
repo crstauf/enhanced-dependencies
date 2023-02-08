@@ -32,11 +32,11 @@ class Prefetch extends Enhancement {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function register() : void {
+	public static function register() : void {
 		parent::register();
 
 		add_action( 'set_dependency_enhancement', array( static::class, 'action__set_dependency_enhancement' ), 10, 4 );
-		add_filter( 'wp_resource_hints',          array( static::class, 'filter__wp_resource_hints' ), 10, 2 );
+		add_filter( 'wp_resource_hints', array( static::class, 'filter__wp_resource_hints' ), 10, 2 );
 	}
 
 	/**
@@ -51,15 +51,23 @@ class Prefetch extends Enhancement {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
-		if ( 'set_dependency_enhancement' !== current_action() )
+	public static function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
+		if ( 'set_dependency_enhancement' !== current_action() ) {
 			return;
+		}
 
-		if ( static::KEY !== $enhancement_key )
+		if ( static::KEY !== $enhancement_key ) {
 			return;
+		}
 
 		if ( did_action( 'wp_head' ) ) {
-			trigger_error( sprintf( 'Too late to apply <code>%s</code> enhancement to <code>%s</code> %s dependency.', static::class, $handle, $is_script ? 'script' : 'style' ) );
+			trigger_error( sprintf(
+				'Too late to apply <code>%s</code> enhancement to <code>%s</code> %s dependency.',
+				static::class,
+				$handle,
+				$is_script ? 'script' : 'style'
+			) );
+
 			return;
 		}
 
@@ -77,6 +85,7 @@ class Prefetch extends Enhancement {
 	 */
 	protected static function add_dependency( string $handle, bool $is_script ) : void {
 		$key = $is_script ? 'scripts' : 'styles';
+
 		static::$dependencies[ $key ][] = $handle;
 	}
 
@@ -89,7 +98,7 @@ class Prefetch extends Enhancement {
 	 * @param array $options
 	 * @return string
 	 */
-	static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
+	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
 		return $tag;
 	}
 
@@ -102,22 +111,25 @@ class Prefetch extends Enhancement {
 	 * @param string $type
 	 * @return array
 	 */
-	static function filter__wp_resource_hints( array $urls, string $type ) : array {
-		if ( 'wp_resource_hints' !== current_filter() )
+	public static function filter__wp_resource_hints( array $urls, string $type ) : array {
+		if ( 'wp_resource_hints' !== current_filter() ) {
 			return $urls;
+		}
 
-		if ( 'prefetch' !== $type )
+		if ( 'prefetch' !== $type ) {
 			return $urls;
+		}
 
 		foreach ( static::$dependencies as $dep_type => $handles ) {
 			foreach ( $handles as $handle ) {
 				$dependency = Dependency::get( $handle, 'scripts' === $dep_type );
 
 				if (
-					empty( $dependency->enhancements[static::KEY]['always'] )
-					&& !$dependency->is( 'enqueued' )
-				)
+					empty( $dependency->enhancements[ static::KEY ]['always'] )
+					&& ! $dependency->is( 'enqueued' )
+				) {
 					continue;
+				}
 
 				$urls[] = $dependency->wp_dep()->src;
 			}
@@ -129,5 +141,3 @@ class Prefetch extends Enhancement {
 }
 
 Prefetch::register();
-
-?>

@@ -23,7 +23,7 @@ abstract class Output_Html extends \QM_Output_Html {
 
 		$helper = 'scripts' === $this->get_collector()->get_dependency_type() ? 'wp_script_is' : 'wp_style_is';
 
-		$data = array_filter( $data, function( $handle ) use( $helper ) {
+		$data = array_filter( $data, function ( $handle ) use ( $helper ) {
 			return $helper( $handle, 'done' );
 		}, ARRAY_FILTER_USE_KEY );
 
@@ -52,12 +52,13 @@ abstract class Output_Html extends \QM_Output_Html {
 
 					echo '<tr' . ( $odd ? ' class="qm-odd"' : '' ) . '>';
 
-						if ( $first )
+						if ( $first ) {
 							echo '<th scope="row" class="qm-nowrap qm-ltr" rowspan="' . count( $enhancements ) . '">'
 								. '<span class="qm-sticky">'
 									. esc_html( $handle )
 								. '</span>'
 							. '</th>';
+						}
 
 						echo '<td class="qm-nowrap qm-ltr">' . esc_html( $key ) . '</td>';
 						echo '<td class="qm-ltr"><code>'
@@ -90,5 +91,3 @@ abstract class Output_Html extends \QM_Output_Html {
 	}
 
 }
-
-?>
