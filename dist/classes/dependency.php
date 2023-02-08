@@ -224,7 +224,7 @@ class Dependency {
 
 		$ver = $object->ver;
 
-		if ( ! is_null( $ver ) && empty( $ver ) )
+		if ( ! is_null( $ver ) && empty( $ver ) ) {
 			$ver = $helper->default_version;
 		}
 
