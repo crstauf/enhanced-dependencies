@@ -15,6 +15,10 @@ class Collector_Styles extends Collector {
 		return 'styles';
 	}
 
+	public function get_storage(): \QM_Data {
+		return new Data();
+	}
+
 }
 
 ?>
