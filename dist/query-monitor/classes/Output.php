@@ -8,7 +8,7 @@ abstract class Output_Html extends \QM_Output_Html {
 
 	public function output() {
 		$data = $this->collector->get_data();
-		$data = $data['assets'];
+		$data = $data->assets;
 
 		if ( empty( $data ) ) {
 			$this->before_non_tabular_output();
