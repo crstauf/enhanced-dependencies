@@ -8,10 +8,12 @@ on:
     paths:
       - dist/**
       - .github/workflows/phpcs.yml
+      - phpcs.xml
   pull_request:
     paths:
       - dist/**
       - .github/workflows/phpcs.yml
+      - phpcs.xml
   workflow_dispatch:
 
 concurrency:

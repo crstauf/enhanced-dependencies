@@ -8,10 +8,12 @@ on:
     paths:
       - dist/**/*.php
       - .github/workflows/phpstan.yml
+      - phpstane-baseline.neon
   pull_request:
     paths:
       - dist/**/*.php
       - .github/workflows/phpstan.yml
+      - phpstane-baseline.neon
   workflow_dispatch:
 
 concurrency:
