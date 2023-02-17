@@ -4,4 +4,3 @@
 /vendor
 /.phpstan-cache
 /wp-content
-/phpstan-baseline.neon
