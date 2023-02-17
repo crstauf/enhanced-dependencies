@@ -22,6 +22,7 @@
 			<directory suffix=".php">dist</directory>
 			<exclude>
 				<directory>dist/query-monitor</directory>
+			</exclude>
 		</whitelist>
 	</filter>
 
