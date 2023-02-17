@@ -15,4 +15,8 @@ class Collector_Scripts extends Collector {
 		return 'scripts';
 	}
 
+	public function get_storage(): \QM_Data {
+		return new Data();
+	}
+
 }

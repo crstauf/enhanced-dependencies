@@ -70,6 +70,7 @@ class Integrate {
 	 */
 	public function filter__qm_collectors( array $collectors ) : array {
 		require_once Plugin::directory_path() . 'query-monitor/classes/Collector.php';
+		require_once Plugin::directory_path() . 'query-monitor/classes/Data.php';
 		require_once Plugin::directory_path() . 'query-monitor/collectors/scripts.php';
 		require_once Plugin::directory_path() . 'query-monitor/collectors/styles.php';
 
