@@ -17,7 +17,7 @@ class Prefetch extends Enhancement {
 	const KEY = 'prefetch';
 
 	/**
-	 * @var array Dependencies with prefetch enhancements.
+	 * @var array<string, mixed[]> Dependencies with prefetch enhancements.
 	 */
 	protected static $dependencies = array(
 		'scripts' => array(),
@@ -43,7 +43,7 @@ class Prefetch extends Enhancement {
 	 * Action: set_dependency_enhancement
 	 *
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @param string $handle
 	 * @param bool $is_script
 	 * @uses static::add_dependency()
@@ -95,7 +95,7 @@ class Prefetch extends Enhancement {
 	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return string
 	 */
 	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
@@ -107,9 +107,9 @@ class Prefetch extends Enhancement {
 	 *
 	 * Add prefetch link tag.
 	 *
-	 * @param array $urls
+	 * @param string[] $urls
 	 * @param string $type
-	 * @return array
+	 * @return string[]
 	 */
 	public static function filter__wp_resource_hints( array $urls, string $type ) : array {
 		if ( 'wp_resource_hints' !== current_filter() ) {
@@ -131,7 +131,13 @@ class Prefetch extends Enhancement {
 					continue;
 				}
 
-				$urls[] = $dependency->wp_dep()->src;
+				$dep = $dependency->wp_dep();
+
+				if ( ! is_object( $dep ) ) {
+					continue;
+				}
+
+				$urls[] = $dep->src;
 			}
 		}
 

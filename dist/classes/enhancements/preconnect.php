@@ -17,7 +17,7 @@ class Preconnect extends Enhancement {
 	const KEY = 'preconnect';
 
 	/**
-	 * @var array Dependencies with preconnect enhancements.
+	 * @var array<string, mixed[]> Dependencies with preconnect enhancements.
 	 */
 	protected static $dependencies = array(
 		'scripts' => array(),
@@ -125,13 +125,25 @@ class Preconnect extends Enhancement {
 					continue;
 				}
 
-				$parsed_url = wp_parse_url( $dependency->wp_dep()->src );
+				$dep = $dependency->wp_dep();
+
+				if ( ! is_object( $dep ) ) {
+					continue;
+				}
+
+				$parsed_url = wp_parse_url( $dep->src );
 
 				if (
 					   empty( $parsed_url['scheme'] )
 					|| empty( $parsed_url['host'] )
 				) {
-					trigger_error( sprintf( 'Cannoy apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain <code>%s</code>.', static::KEY, $handle, $dependency->wp_dep()->src ) );
+					trigger_error( sprintf(
+						'Cannoy apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain <code>%s</code>.',
+						static::KEY,
+						$handle,
+						$dep->src
+					) );
+
 					continue; // @codeCoverageIgnore
 				}
 

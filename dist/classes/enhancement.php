@@ -15,7 +15,7 @@ abstract class Enhancement {
 	const KEY = '';
 
 	/**
-	 * @var array Default options.
+	 * @var mixed[] Default options.
 	 */
 	const DEFAULT_ARGS = array();
 
@@ -35,7 +35,7 @@ abstract class Enhancement {
 	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return string
 	 */
 	abstract public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string;

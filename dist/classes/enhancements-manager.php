@@ -10,7 +10,7 @@ defined( 'WPINC' ) || die(); // @codeCoverageIgnore
 class Enhancements_Manager {
 
 	/**
-	* @var array key => class name
+	* @var array<string, string> array key => class name
 	*/
 	protected static $enhancements = array();
 
@@ -18,7 +18,7 @@ class Enhancements_Manager {
 	 * Get enhancement object(s).
 	 *
 	 * @param null|string $key
-	 * @return string|array
+	 * @return string|string[]
 	 */
 	public static function get( string $key = null ) {
 		if ( is_null( $key ) ) {

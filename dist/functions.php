@@ -12,7 +12,7 @@ if ( ! function_exists( 'wp_enhance_script' ) ) {
 	 *
 	 * @param string $handle
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return void
 	 */
 	function wp_enhance_script( string $handle, string $enhancement_key, array $options = array() ) : void {
@@ -30,7 +30,7 @@ if ( ! function_exists( 'wp_enhance_style' ) ) {
 	 *
 	 * @param string $handle
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return void
 	 */
 	function wp_enhance_style( string $handle, string $enhancement_key, array $options = array() ) : void {
@@ -80,7 +80,7 @@ if ( ! function_exists( 'wp_register_enhanced_script' ) ) {
 	 * Useful for immediate enhancement: wp_register_enhanced_script()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param bool $in_footer
@@ -104,7 +104,7 @@ if ( ! function_exists( 'wp_enqueue_enhanced_script' ) ) {
 	 * Useful for immediate and conditional enhancement: wp_enqueue_enhanced_script()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param bool $in_footer
@@ -128,7 +128,7 @@ if ( ! function_exists( 'wp_register_enhanced_style' ) ) {
 	 * Useful for immediate enhancement: wp_register_enhanced_style()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param string $media
@@ -152,7 +152,7 @@ if ( ! function_exists( 'wp_enqueue_enhanced_style' ) ) {
 	 * Useful for immediate enhancement: wp_enqueue_enhanced_script()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param string $media

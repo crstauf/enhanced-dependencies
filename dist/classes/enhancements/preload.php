@@ -19,7 +19,7 @@ class Preload extends Enhancement {
 	const KEY = 'preload';
 
 	/**
-	 * @var array Dependencies with preload enhancements.
+	 * @var array<string, mixed[]> Dependencies with preload enhancements.
 	 */
 	protected static $dependencies = array(
 		'scripts' => array(),
@@ -46,7 +46,7 @@ class Preload extends Enhancement {
 	 * Action: set_dependency_enhancement
 	 *
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @param string $handle
 	 * @param bool $is_script
 	 * @uses static::add_dependency()
@@ -181,7 +181,7 @@ class Preload extends Enhancement {
 	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return string
 	 */
 	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {

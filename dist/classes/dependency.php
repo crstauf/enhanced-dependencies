@@ -9,6 +9,8 @@ defined( 'WPINC' ) || die(); // @codeCoverageIgnore
 
 /**
  * Class: Enhanced_Dependencies\Dependency
+ *
+ * @property mixed[] $enhancements
  */
 class Dependency {
 
@@ -19,17 +21,23 @@ class Dependency {
 
 	/**
 	 * @var string $handle Dependency handle.
-	 * @var bool $is_script Dependency is a script.
-	 * @var array $enhancements Array of enhancements options.
 	 */
 	protected $handle;
+
+	/**
+	 * @var bool $is_script Dependency is a script.
+	 */
 	protected $is_script;
+
+	/**
+	 * @var mixed[] $enhancements Array of enhancements options.
+	 */
 	protected $enhancements = array();
 
 	/**
 	 * Get this object from dependency data.
 	 *
-	 * @param string $Handle
+	 * @param string $handle
 	 * @param bool $is_script
 	 * @return self
 	 */
@@ -80,7 +88,7 @@ class Dependency {
 	/**
 	 * Get dependencies helper.
 	 *
-	 * @return WP_Scripts|WP_Styles
+	 * @return \WP_Scripts|\WP_Styles
 	 */
 	public function helper() : \WP_Dependencies {
 		return $this->is_script ? wp_scripts() : wp_styles();
@@ -106,7 +114,7 @@ class Dependency {
 	 * Add enhancement to dependency.
 	 *
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return self
 	 */
 	public function set( string $enhancement_key, array $options = array() ) : self {
@@ -167,7 +175,7 @@ class Dependency {
 	/**
 	 * Get WordPress dependency object.
 	 *
-	 * @return bool|_WP_Dependency
+	 * @return bool|\_WP_Dependency
 	 */
 	public function wp_dep() {
 		if (
@@ -212,6 +220,10 @@ class Dependency {
 	public function get_url( bool $absolute = true ) : string {
 		$object = $this->wp_dep();
 		$helper = $this->helper();
+
+		if ( ! is_object( $object ) ) {
+			return '';
+		}
 
 		$src = $object->src;
 

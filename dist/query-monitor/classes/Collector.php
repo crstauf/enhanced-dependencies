@@ -10,11 +10,12 @@ defined( 'WPINC' ) || die();
 /**
  * @todo add action for removed enhancement
  */
-class Collector extends \QM_DataCollector {
+abstract class Collector extends \QM_Collector {
 
-	protected $data = array(
-		'assets' => array(),
-	);
+	/**
+	 * @var Data
+	 */
+	protected $data;
 
 	public function __construct() {
 		parent::__construct();
@@ -27,9 +28,26 @@ class Collector extends \QM_DataCollector {
 		add_action( 'removed_dependency_enhancement', array( $this, 'action__removed_dependency_enhancement' ), 10, 3 );
 	}
 
+	abstract public function get_dependency_type() : string;
+
+	/**
+	 * @return Data
+	 */
+	public function get_data() {
+		return $this->data;
+	}
+
 	public function process() : void {
 	}
 
+	/**
+	 * @param string $enhancement_key
+	 * @param mixed[] $options
+	 * @param string $handle
+	 * @param bool $is_script
+	 *
+	 * @return void
+	 */
 	public function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
 		if ( did_action( 'qm/cease' ) ) {
 			return;
@@ -48,6 +66,13 @@ class Collector extends \QM_DataCollector {
 		$this->data->assets[ $handle ][ $enhancement_key ] = $options;
 	}
 
+	/**
+	 * @param string $enhancement_key
+	 * @param string $handle
+	 * @param bool $is_script
+	 *
+	 * @return void
+	 */
 	public function action__removed_dependency_enhancement( string $enhancement_key, string $handle, bool $is_script ) : void {
 		if ( did_action( 'qm/cease' ) ) {
 			return;

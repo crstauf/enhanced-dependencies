@@ -9,13 +9,22 @@ defined( 'WPINC' ) || die();
 
 class Output_Html_Styles extends Output_Html {
 
+	/**
+	 * @var string
+	 */
 	const TYPE = 'styles';
 
-	public function name() {
+	/**
+	 * @return string
+	 */
+	public function name() : string {
 		return __( 'Enhanced', 'query-monitor' );
 	}
 
-	public function get_type_labels() {
+	/**
+	 * @return array<string, string>
+	 */
+	public function get_type_labels() : array {
 		return array(
 			/* translators: %s: Total number of enhanced styles */
 			'total'  => _x( 'Total: %s', 'Enhanced styles', 'query-monitor' ),

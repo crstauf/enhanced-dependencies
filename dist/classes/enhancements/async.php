@@ -12,6 +12,9 @@ class Async extends Enhancement {
 
 	const KEY = 'async';
 
+	/**
+	 * @var mixed[]
+	 */
 	protected static $footer_queue = array();
 
 	/**
@@ -24,7 +27,7 @@ class Async extends Enhancement {
 	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return string
 	 */
 	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {

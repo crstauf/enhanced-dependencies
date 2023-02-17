@@ -10,12 +10,14 @@
         "php-stubs/wordpress-stubs": "^5.9",
         "szepeviktor/phpstan-wordpress": "^1.1",
         "phpstan/extension-installer": "^1.1",
-        "php-stubs/acf-pro-stubs": "^5.12"
+        "php-stubs/acf-pro-stubs": "^5.12",
+        "johnbillion/query-monitor": "^3.11"
     },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "composer/installers": true
         }
     }
 }

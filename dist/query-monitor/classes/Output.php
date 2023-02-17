@@ -6,9 +6,30 @@ defined( 'WPINC' ) || die();
 
 abstract class Output_Html extends \QM_Output_Html {
 
+	const TYPE = '';
+
+	/**
+	 * Collector instance.
+	 *
+	 * @var Collector
+	 */
+	protected $collector;
+
+	/**
+	 * @return string[]
+	 */
+	abstract public function get_type_labels() : array;
+
+	/**
+	 * @return Collector
+	 */
+	public function get_collector() {
+		return $this->collector;
+	}
+
 	public function output() {
 		$data = $this->collector->get_data();
-		$data = $data->assets;
+		$data = ( array ) $data->assets;
 
 		if ( empty( $data ) ) {
 			$this->before_non_tabular_output();

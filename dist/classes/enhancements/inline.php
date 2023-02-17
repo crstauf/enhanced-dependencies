@@ -19,7 +19,7 @@ class Inline extends Enhancement {
 	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return string
 	 */
 	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
@@ -66,10 +66,15 @@ class Inline extends Enhancement {
 	 */
 	protected static function get_dependency_path( string $handle, bool $is_script ) : string {
 		$dependency = Dependency::get( $handle, $is_script );
+		$dep = $dependency->wp_dep();
 
-		$path = str_replace( trailingslashit( site_url() ), trailingslashit( ABSPATH ), $dependency->wp_dep()->src );
+		if ( ! is_object( $dep ) ) {
+			return '';
+		}
 
-		if ( $dependency->helper()->in_default_dir( $dependency->wp_dep()->src ) ) {
+		$path = str_replace( trailingslashit( site_url() ), trailingslashit( ABSPATH ), $dep->src );
+
+		if ( $dependency->helper()->in_default_dir( $dep->src ) ) {
 			$path = ABSPATH . $path;
 		}
 

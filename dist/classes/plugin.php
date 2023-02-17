@@ -9,6 +9,9 @@ defined( 'WPINC' ) || die(); // @codeCoverageIgnore
  */
 class Plugin {
 
+	/**
+	 * @var string
+	 */
 	protected static $file;
 
 	/**
@@ -21,11 +24,13 @@ class Plugin {
 	 * @codeCoverageIgnore
 	 */
 	public static function init( string $file ) : void {
-		$once = false;
+		static $once = false;
 
 		if ( $once ) {
 			return;
 		}
+
+		$once = true;
 
 		static::$file = $file;
 
@@ -179,11 +184,17 @@ class Plugin {
 		foreach ( $dependency->enhancements as $key => $options ) {
 			$enhancement = Enhancements_Manager::get( $key );
 
-			if ( empty( $enhancement ) ) {
+			if ( empty( $enhancement ) || ! is_string( $enhancement ) ) {
 				continue;
 			}
 
-			$tag = call_user_func_array( array( $enhancement, 'apply' ), array( $tag, $handle, $is_script, $options ) );
+			$callable = array( $enhancement, 'apply' );
+
+			if ( ! is_callable( $callable ) ) {
+				continue;
+			}
+
+			$tag = call_user_func_array( $callable, array( $tag, $handle, $is_script, $options ) );
 		}
 
 		return $tag;
@@ -194,7 +205,7 @@ class Plugin {
 	 *
 	 * Magically handle 'push' enhancement.
 	 *
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @param string $handle
 	 * @param bool $is_script
 	 * @return void

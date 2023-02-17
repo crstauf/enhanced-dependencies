@@ -9,13 +9,22 @@ defined( 'WPINC' ) || die();
 
 class Output_Html_Scripts extends Output_Html {
 
+	/**
+	 * @var string
+	 */
 	const TYPE = 'scripts';
 
-	public function name() {
+	/**
+	 * @return string
+	 */
+	public function name() : string {
 		return __( 'Enhanced', 'query-monitor' );
 	}
 
-	public function get_type_labels() {
+	/**
+	 * @return array<string, string>
+	 */
+	public function get_type_labels() : array {
 		return array(
 			/* translators: %s: Total number of enhanced scripts */
 			'total'  => _x( 'Total: %s', 'Enhanced scripts', 'query-monitor' ),
