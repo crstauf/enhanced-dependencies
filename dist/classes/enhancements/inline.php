@@ -66,7 +66,7 @@ class Inline extends Enhancement {
 	 */
 	protected static function get_dependency_path( string $handle, bool $is_script ) : string {
 		$dependency = Dependency::get( $handle, $is_script );
-		$dep = $dependency->wp_dep();
+		$dep        = $dependency->wp_dep();
 
 		if ( ! is_object( $dep ) ) {
 			return '';
