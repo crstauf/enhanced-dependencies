@@ -1,5 +1,4 @@
 .DS_Store
-/bin
 /tests/reports
 /vendor
 /.phpstan-cache
