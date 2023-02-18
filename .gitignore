@@ -3,3 +3,4 @@
 /vendor
 /.phpstan-cache
 /wp-content
+/.phpunit.result.cache

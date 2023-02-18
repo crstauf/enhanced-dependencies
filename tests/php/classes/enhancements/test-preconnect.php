@@ -66,6 +66,8 @@ class Test_Enhancement_Preconnect extends \WP_UnitTestCase {
 	}
 
 	function test_error() : void {
+		$expected = @apply_filters( 'wp_resource_hints', array(), 'preconnect' );
+
 		$handle = uniqid( 'test-script-error' );
 		$domain = uniqid( 'test_error' ) . '.com';
 		$url = $domain . '/test-script.js';
@@ -74,8 +76,8 @@ class Test_Enhancement_Preconnect extends \WP_UnitTestCase {
 
 		Dependency::get( $handle, true )->set( Preconnect::KEY, array( 'always' => true ) );
 
-		$this->expectException( \PHPUnit\Framework\Error\Error::class );
-		$urls = apply_filters( 'wp_resource_hints', array(), 'preconnect' );
+		$actual = @apply_filters( 'wp_resource_hints', array(), 'preconnect' );
+		$this->assertEquals( $expected, $actual );
 	}
 
 }

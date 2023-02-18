@@ -8,6 +8,8 @@
 	convertWarningsToExceptions="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutOutputDuringTests="true"
+	beStrictAboutTodoAnnotatedTests="true"
+	processIsolation="false"
 	reverseDefectList="true"
 >
 
@@ -17,17 +19,22 @@
 		</testsuite>
 	</testsuites>
 
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">dist</directory>
-			<exclude>
-				<directory>dist/query-monitor</directory>
-			</exclude>
-		</whitelist>
-	</filter>
+	<coverage
+		processUncoveredFiles="true"
+	>
 
-	<logging>
-		<log type="coverage-html" target="tests/reports/php" />
-	</logging>
+		<include>
+			<directory suffix=".php">./dist</directory>
+		</include>
+
+		<exclude>
+			<directory suffix=".php">./dist/query-monitor</directory>
+		</exclude>
+
+		<report>
+			<html outputDirectory="tests/reports/php" />
+		</report>
+
+	</coverage>
 
 </phpunit>

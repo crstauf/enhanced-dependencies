@@ -19,6 +19,7 @@ class Plugin_Data extends \WP_UnitTestCase {
 			'Network' => false,
 			'RequiresWP' => '5.6',
 			'RequiresPHP' => '7.4',
+			'UpdateURI' => '',
 			'Title' => 'Enhanced Dependencies',
 			'AuthorName' => 'Caleb Stauffer',
 		);

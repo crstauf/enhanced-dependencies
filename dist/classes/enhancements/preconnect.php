@@ -138,11 +138,11 @@ class Preconnect extends Enhancement {
 					|| empty( $parsed_url['host'] )
 				) {
 					trigger_error( sprintf(
-						'Cannoy apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain <code>%s</code>.',
+						'Cannot apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain <code>%s</code>.',
 						static::KEY,
 						$handle,
 						$dep->src
-					) );
+					), E_USER_WARNING );
 
 					continue; // @codeCoverageIgnore
 				}
