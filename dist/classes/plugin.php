@@ -78,10 +78,7 @@ class Plugin {
 	 * @codeCoverageIgnore
 	 */
 	protected function __construct() {
-		if ( ! defined( 'QM_DISABLED' ) || ! constant( 'QM_DISABLED' ) ) {
-			include_once static::directory_path() . 'query-monitor/query-monitor.php';
-		}
-
+		$this->includes();
 		$this->hooks();
 	}
 
@@ -98,13 +95,14 @@ class Plugin {
 		require_once static::directory_path() . 'classes/dependency.php';
 		require_once static::directory_path() . 'classes/enhancements-manager.php';
 		require_once static::directory_path() . 'classes/enhancement.php';
+		include_once static::directory_path() . 'query-monitor/query-monitor.php';
 
-		require_once static::directory_path() . 'classes/enhancements/async.php';
-		require_once static::directory_path() . 'classes/enhancements/defer.php';
-		require_once static::directory_path() . 'classes/enhancements/inline.php';
-		require_once static::directory_path() . 'classes/enhancements/preconnect.php';
-		require_once static::directory_path() . 'classes/enhancements/prefetch.php';
-		require_once static::directory_path() . 'classes/enhancements/preload.php';
+		require_once static::directory_path() . '/classes/enhancements/async.php';
+		require_once static::directory_path() . '/classes/enhancements/defer.php';
+		require_once static::directory_path() . '/classes/enhancements/inline.php';
+		require_once static::directory_path() . '/classes/enhancements/preconnect.php';
+		require_once static::directory_path() . '/classes/enhancements/prefetch.php';
+		require_once static::directory_path() . '/classes/enhancements/preload.php';
 
 		do_action( 'include_dependency_enhancements' );
 	}
@@ -117,28 +115,10 @@ class Plugin {
 	 * @codeCoverageIgnore
 	 */
 	protected function hooks() : void {
-		add_action( 'send_headers', array( $this, 'action__send_headers' ), 0 );
 		add_action( 'set_dependency_enhancement_push', array( $this, 'action__set_dependency_enhancement_push' ), 10, 3 );
 
 		add_filter( 'script_loader_tag', array( $this, 'filter__script_loader_tag' ), 1000, 2 );
 		add_filter( 'style_loader_tag', array( $this, 'filter__style_loader_tag' ), 1000, 2 );
-	}
-
-	/**
-	 * Action: send_headers
-	 *
-	 * Include files on frontend.
-	 *
-	 * @return void
-	 *
-	 * @codeCoverageIgnore
-	 */
-	public function action__send_headers() : void {
-		if ( 'send_headers' !== current_action() ) {
-			return;
-		}
-
-		$this->includes();
 	}
 
 	/**
