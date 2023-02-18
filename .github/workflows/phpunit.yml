@@ -72,7 +72,7 @@ jobs:
           ${{ runner.os }}-composer-
 
     - name: Composer install
-      run: composer install --optimize-autoloader --prefer-dist --no-suggest --no-progress --no-ansi --no-interaction
+      run: composer install --optimize-autoloader --prefer-dist --no-progress --no-ansi --no-interaction
 
     - name: Install WP Tests
       run: ./bin/install-wp-tests.sh ${MYSQL_DATABASE} ${MYSQL_USER} ${MYSQL_PASSWORD} ${DB_HOST}:${DB_PORT} ${WP_VERSION}
