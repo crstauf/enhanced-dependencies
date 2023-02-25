@@ -17,7 +17,7 @@ class Preconnect extends Enhancement {
 	const KEY = 'preconnect';
 
 	/**
-	 * @var array Dependencies with preconnect enhancements.
+	 * @var array<string, mixed[]> Dependencies with preconnect enhancements.
 	 */
 	protected static $dependencies = array(
 		'scripts' => array(),
@@ -32,18 +32,18 @@ class Preconnect extends Enhancement {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function register() : void {
+	public static function register() : void {
 		parent::register();
 
 		add_action( 'set_dependency_enhancement', array( static::class, 'action__set_dependency_enhancement' ), 10, 4 );
-		add_filter( 'wp_resource_hints',          array( static::class, 'filter__wp_resource_hints' ), 10, 2 );
+		add_filter( 'wp_resource_hints', array( static::class, 'filter__wp_resource_hints' ), 10, 2 );
 	}
 
 	/**
 	 * Action: set_dependency_enhancement
 	 *
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @param string $handle
 	 * @param bool $is_script
 	 * @uses static::add_dependency()
@@ -51,12 +51,14 @@ class Preconnect extends Enhancement {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
-		if ( 'set_dependency_enhancement' !== current_action() )
+	public static function action__set_dependency_enhancement( string $enhancement_key, array $options, string $handle, bool $is_script ) : void {
+		if ( 'set_dependency_enhancement' !== current_action() ) {
 			return;
+		}
 
-		if ( static::KEY !== $enhancement_key )
+		if ( static::KEY !== $enhancement_key ) {
 			return;
+		}
 
 		if ( did_action( 'wp_head' ) ) {
 			trigger_error( sprintf( 'Too late to apply <code>%s</code> enhancement to <code>%s</code> %s dependency.', static::class, $handle, $is_script ? 'script' : 'style' ) );
@@ -77,6 +79,7 @@ class Preconnect extends Enhancement {
 	 */
 	protected static function add_dependency( string $handle, bool $is_script ) : void {
 		$key = $is_script ? 'scripts' : 'styles';
+
 		static::$dependencies[ $key ][] = $handle;
 	}
 
@@ -86,10 +89,10 @@ class Preconnect extends Enhancement {
 	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return string
 	 */
-	static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
+	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
 		return $tag;
 	}
 
@@ -98,34 +101,49 @@ class Preconnect extends Enhancement {
 	 *
 	 * Add preconnect link tag.
 	 *
-	 * @param array $urls
+	 * @param string[] $urls
 	 * @param string $type
-	 * @return array
+	 * @return string[]
 	 */
-	static function filter__wp_resource_hints( array $urls, string $type ) : array {
-		if ( 'wp_resource_hints' !== current_filter() )
+	public static function filter__wp_resource_hints( array $urls, string $type ) : array {
+		if ( 'wp_resource_hints' !== current_filter() ) {
 			return $urls;
+		}
 
-		if ( 'preconnect' !== $type )
+		if ( 'preconnect' !== $type ) {
 			return $urls;
+		}
 
 		foreach ( static::$dependencies as $dep_type => $handles ) {
 			foreach ( $handles as $handle ) {
 				$dependency = Dependency::get( $handle, 'scripts' === $dep_type );
 
 				if (
-					empty( $dependency->enhancements[static::KEY]['always'] )
-					&& !$dependency->is( 'enqueued' )
-				)
+					empty( $dependency->enhancements[ static::KEY ]['always'] )
+					&& ! $dependency->is( 'enqueued' )
+				) {
 					continue;
+				}
 
-				$parsed_url = wp_parse_url( $dependency->wp_dep()->src );
+				$dep = $dependency->wp_dep();
+
+				if ( ! is_object( $dep ) ) {
+					continue;
+				}
+
+				$parsed_url = wp_parse_url( $dep->src );
 
 				if (
 					   empty( $parsed_url['scheme'] )
 					|| empty( $parsed_url['host'] )
 				) {
-					trigger_error( sprintf( 'Cannoy apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain <code>%s</code>.', static::KEY, $handle, $dependency->wp_dep()->src ) );
+					trigger_error( sprintf(
+						'Cannot apply <code>%s</code> enhancement to asset <code>%s</code> on unknown domain <code>%s</code>.',
+						static::KEY,
+						$handle,
+						$dep->src
+					), E_USER_WARNING );
+
 					continue; // @codeCoverageIgnore
 				}
 
@@ -139,5 +157,3 @@ class Preconnect extends Enhancement {
 }
 
 Preconnect::register();
-
-?>

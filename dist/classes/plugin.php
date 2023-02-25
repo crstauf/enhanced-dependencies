@@ -9,6 +9,9 @@ defined( 'WPINC' ) || die(); // @codeCoverageIgnore
  */
 class Plugin {
 
+	/**
+	 * @var string
+	 */
 	protected static $file;
 
 	/**
@@ -20,11 +23,14 @@ class Plugin {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	static function init( string $file ) : void {
-		$once = false;
+	public static function init( string $file ) : void {
+		static $once = false;
 
-		if ( $once )
+		if ( $once ) {
 			return;
+		}
+
+		$once = true;
 
 		static::$file = $file;
 
@@ -41,8 +47,9 @@ class Plugin {
 	protected static function instance() : self {
 		static $instance = null;
 
-		if ( is_null( $instance ) )
+		if ( is_null( $instance ) ) {
 			$instance = new self;
+		}
 
 		return $instance;
 	}
@@ -52,7 +59,7 @@ class Plugin {
 	 *
 	 * @return string
 	 */
-	static function file() : string {
+	public static function file() : string {
 		return static::$file;
 	}
 
@@ -61,7 +68,7 @@ class Plugin {
 	 *
 	 * @return string
 	 */
-	static function directory_path() : string {
+	public static function directory_path() : string {
 		return trailingslashit( plugin_dir_path( static::$file ) );
 	}
 
@@ -111,7 +118,7 @@ class Plugin {
 		add_action( 'set_dependency_enhancement_push', array( $this, 'action__set_dependency_enhancement_push' ), 10, 3 );
 
 		add_filter( 'script_loader_tag', array( $this, 'filter__script_loader_tag' ), 1000, 2 );
-		add_filter(  'style_loader_tag', array( $this,  'filter__style_loader_tag' ), 1000, 2 );
+		add_filter( 'style_loader_tag', array( $this, 'filter__style_loader_tag' ), 1000, 2 );
 	}
 
 	/**
@@ -126,9 +133,10 @@ class Plugin {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	function filter__script_loader_tag( string $html, string $handle ) : string {
-		if ( !doing_filter( 'script_loader_tag' ) )
+	public function filter__script_loader_tag( string $html, string $handle ) : string {
+		if ( ! doing_filter( 'script_loader_tag' ) ) {
 			return $html;
+		}
 
 		return $this->maybe_enhance_tag( $html, $handle, true );
 	}
@@ -145,9 +153,10 @@ class Plugin {
 	 *
 	 * @codeCoverageIgnore
 	 */
-	function filter__style_loader_tag( string $html, string $handle ) : string {
-		if ( !doing_filter( 'style_loader_tag' ) )
+	public function filter__style_loader_tag( string $html, string $handle ) : string {
+		if ( ! doing_filter( 'style_loader_tag' ) ) {
 			return $html;
+		}
 
 		return $this->maybe_enhance_tag( $html, $handle, false );
 	}
@@ -168,16 +177,24 @@ class Plugin {
 	protected function maybe_enhance_tag( string $tag, string $handle, bool $is_script ) : string {
 		$dependency = Dependency::get( $handle, $is_script );
 
-		if ( !$dependency->has() )
+		if ( ! $dependency->has() ) {
 			return $tag;
+		}
 
 		foreach ( $dependency->enhancements as $key => $options ) {
 			$enhancement = Enhancements_Manager::get( $key );
 
-			if ( empty( $enhancement ) )
+			if ( empty( $enhancement ) || ! is_string( $enhancement ) ) {
 				continue;
+			}
 
-			$tag = call_user_func_array( array( $enhancement, 'apply' ), array( $tag, $handle, $is_script, $options ) );
+			$callable = array( $enhancement, 'apply' );
+
+			if ( ! is_callable( $callable ) ) {
+				continue;
+			}
+
+			$tag = call_user_func_array( $callable, array( $tag, $handle, $is_script, $options ) );
 		}
 
 		return $tag;
@@ -188,13 +205,13 @@ class Plugin {
 	 *
 	 * Magically handle 'push' enhancement.
 	 *
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @param string $handle
 	 * @param bool $is_script
 	 * @return void
 	 */
-	function action__set_dependency_enhancement_push( array $options, string $handle, bool $is_script ) : void {
-		$options['link'] = false;
+	public function action__set_dependency_enhancement_push( array $options, string $handle, bool $is_script ) : void {
+		$options['link']        = false;
 		$options['http_header'] = true;
 
 		$dependency = Dependency::get( $handle, $is_script );
@@ -202,5 +219,3 @@ class Plugin {
 	}
 
 }
-
-?>

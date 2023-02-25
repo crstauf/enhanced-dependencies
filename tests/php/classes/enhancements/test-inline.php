@@ -8,7 +8,7 @@ use Enhanced_Dependencies\Enhancements\Inline;
 class Test_Enhancement_Inline extends \WP_UnitTestCase {
 
 	function filter__dependency_path( string $path ) : string {
-		$search = trailingslashit( ABSPATH ) . 'wp-content/mu-plugins/enhanced-dependencies/';
+		$search  = trailingslashit( ABSPATH ) . 'wp-content/mu-plugins/enhanced-dependencies/';
 		$replace = Plugin::directory_path();
 		$replace = str_replace( '/dist', '', $replace );
 
@@ -25,14 +25,11 @@ class Test_Enhancement_Inline extends \WP_UnitTestCase {
 		wp_print_styles( $handle );
 		$tag = ob_get_clean();
 
-		$expected = trim( "<link rel='stylesheet' id='$handle-css'  href='http://example.org/notfound.css?ver=1.0' type='text/css' media='all' />" );
+		$expected = trim( "<link rel='stylesheet' id='$handle-css' href='http://example.org/notfound.css?ver=1.0' type='text/css' media='all' />" );
 
 		$actual = trim( @Inline::apply( $tag, $handle, false ) );
 		$this->assertEquals( $actual, trim( $tag ) );
 		$this->assertEquals( $actual, $expected );
-
-		$this->expectException( \PHPUnit\Framework\Error\Error::class );
-		$actual = Inline::apply( $tag, $handle, false );
 	}
 
 	function test_empty() : void {

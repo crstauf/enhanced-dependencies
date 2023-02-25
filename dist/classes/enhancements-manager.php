@@ -10,7 +10,7 @@ defined( 'WPINC' ) || die(); // @codeCoverageIgnore
 class Enhancements_Manager {
 
 	/**
-	* @var array key => class name
+	* @var array<string, string> array key => class name
 	*/
 	protected static $enhancements = array();
 
@@ -18,14 +18,16 @@ class Enhancements_Manager {
 	 * Get enhancement object(s).
 	 *
 	 * @param null|string $key
-	 * @return string|array
+	 * @return string|string[]
 	 */
-	static function get( string $key = null ) {
-		if ( is_null( $key ) )
+	public static function get( string $key = null ) {
+		if ( is_null( $key ) ) {
 			return static::$enhancements;
+		}
 
-		if ( !array_key_exists( $key, static::$enhancements ) )
+		if ( ! array_key_exists( $key, static::$enhancements ) ) {
 			return '';
+		}
 
 		return static::$enhancements[ $key ];
 	}
@@ -39,7 +41,7 @@ class Enhancements_Manager {
 	 *
 	 * @todo add check that class name exists and apply() method is callable
 	 */
-	static function register( string $key, string $class_name ) : void {
+	public static function register( string $key, string $class_name ) : void {
 		if ( array_key_exists( $key, static::$enhancements ) ) {
 			trigger_error( sprintf( 'Enhancement with key <code>%s</code> is already registered.', $key ) );
 			return;
@@ -49,5 +51,3 @@ class Enhancements_Manager {
 	}
 
 }
-
-?>

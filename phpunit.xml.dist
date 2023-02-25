@@ -8,6 +8,8 @@
 	convertWarningsToExceptions="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	beStrictAboutOutputDuringTests="true"
+	beStrictAboutTodoAnnotatedTests="true"
+	processIsolation="false"
 	reverseDefectList="true"
 >
 
@@ -17,23 +19,22 @@
 		</testsuite>
 	</testsuites>
 
-	<filter>
-		<whitelist processUncoveredFilesFromWhitelist="true">
-			<file>dist/functions.php</file>
-			<file>dist/classes/plugin.php</file>
-			<file>dist/classes/dependency.php</file>
-			<file>dist/classes/enhancements-manager.php</file>
-			<file>dist/classes/enhancements/async.php</file>
-			<file>dist/classes/enhancements/defer.php</file>
-			<file>dist/classes/enhancements/inline.php</file>
-			<file>dist/classes/enhancements/preconnect.php</file>
-			<file>dist/classes/enhancements/prefetch.php</file>
-			<file>dist/classes/enhancements/preload.php</file>
-		</whitelist>
-	</filter>
+	<coverage
+		processUncoveredFiles="true"
+	>
 
-	<logging>
-		<log type="coverage-html" target="tests/reports/php" />
-	</logging>
+		<include>
+			<directory suffix=".php">./dist</directory>
+		</include>
+
+		<exclude>
+			<directory suffix=".php">./dist/query-monitor</directory>
+		</exclude>
+
+		<report>
+			<html outputDirectory="tests/reports/php" />
+		</report>
+
+	</coverage>
 
 </phpunit>

@@ -5,14 +5,14 @@
 
 defined( 'WPINC' ) || die();
 
-if ( !function_exists( 'wp_enhance_script' ) ) {
+if ( ! function_exists( 'wp_enhance_script' ) ) {
 
 	/**
 	 * Enhance registered script.
 	 *
 	 * @param string $handle
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return void
 	 */
 	function wp_enhance_script( string $handle, string $enhancement_key, array $options = array() ) : void {
@@ -23,14 +23,14 @@ if ( !function_exists( 'wp_enhance_script' ) ) {
 }
 
 
-if ( !function_exists( 'wp_enhance_style' ) ) {
+if ( ! function_exists( 'wp_enhance_style' ) ) {
 
 	/**
 	 * Enhance registered stylesheet.
 	 *
 	 * @param string $handle
 	 * @param string $enhancement_key
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return void
 	 */
 	function wp_enhance_style( string $handle, string $enhancement_key, array $options = array() ) : void {
@@ -40,7 +40,7 @@ if ( !function_exists( 'wp_enhance_style' ) ) {
 
 }
 
-if ( !function_exists( 'wp_dehance_script' ) ) {
+if ( ! function_exists( 'wp_dehance_script' ) ) {
 
 	/**
 	 * Dehance registered script.
@@ -56,7 +56,7 @@ if ( !function_exists( 'wp_dehance_script' ) ) {
 
 }
 
-if ( !function_exists( 'wp_dehance_style' ) ) {
+if ( ! function_exists( 'wp_dehance_style' ) ) {
 
 	/**
 	 * Dehance registered stylesheet.
@@ -72,7 +72,7 @@ if ( !function_exists( 'wp_dehance_style' ) ) {
 
 }
 
-if ( !function_exists( 'wp_register_enhanced_script' ) ) {
+if ( ! function_exists( 'wp_register_enhanced_script' ) ) {
 
 	/**
 	 * Register script and return Dependency object.
@@ -80,7 +80,7 @@ if ( !function_exists( 'wp_register_enhanced_script' ) ) {
 	 * Useful for immediate enhancement: wp_register_enhanced_script()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param bool $in_footer
@@ -96,7 +96,7 @@ if ( !function_exists( 'wp_register_enhanced_script' ) ) {
 	}
 }
 
-if ( !function_exists( 'wp_enqueue_enhanced_script' ) ) {
+if ( ! function_exists( 'wp_enqueue_enhanced_script' ) ) {
 
 	/**
 	 * Enqueue script and return Dependency object.
@@ -104,7 +104,7 @@ if ( !function_exists( 'wp_enqueue_enhanced_script' ) ) {
 	 * Useful for immediate and conditional enhancement: wp_enqueue_enhanced_script()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param bool $in_footer
@@ -120,7 +120,7 @@ if ( !function_exists( 'wp_enqueue_enhanced_script' ) ) {
 	}
 }
 
-if ( !function_exists( 'wp_register_enhanced_style' ) ) {
+if ( ! function_exists( 'wp_register_enhanced_style' ) ) {
 
 	/**
 	 * Register stylesheet and return Dependency object.
@@ -128,7 +128,7 @@ if ( !function_exists( 'wp_register_enhanced_style' ) ) {
 	 * Useful for immediate enhancement: wp_register_enhanced_style()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param string $media
@@ -144,7 +144,7 @@ if ( !function_exists( 'wp_register_enhanced_style' ) ) {
 	}
 }
 
-if ( !function_exists( 'wp_enqueue_enhanced_style' ) ) {
+if ( ! function_exists( 'wp_enqueue_enhanced_style' ) ) {
 
 	/**
 	 * Enqueue stylesheet and return Dependency object.
@@ -152,7 +152,7 @@ if ( !function_exists( 'wp_enqueue_enhanced_style' ) ) {
 	 * Useful for immediate enhancement: wp_enqueue_enhanced_script()->set( $enhancement_key )
 	 *
 	 * @param string $handle
-	 * @param string|bool $src
+	 * @param string $src
 	 * @param string[] $deps
 	 * @param string|bool|null $ver
 	 * @param string $media
@@ -166,6 +166,5 @@ if ( !function_exists( 'wp_enqueue_enhanced_style' ) ) {
 		wp_enqueue_style( $handle, $src, $deps, $ver, $media );
 		return Enhanced_Dependencies\Dependency::get( $handle, false );
 	}
-}
 
-?>
+}

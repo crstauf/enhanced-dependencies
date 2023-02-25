@@ -12,7 +12,13 @@ class Test_Enhancement_Async extends \WP_UnitTestCase {
 
 	function test_stylesheet() : void {
 		$actual = trim( Async::apply( "<link href='' media='all' />", uniqid(), false ) );
-		$this->assertEquals( "<link href='' media='print' onload='this.media=\"all\"' /><noscript><link href='' media='all' /></noscript>", $actual );
+		$this->assertEquals( "<link href='' media='print' onload='this.media=\"all\"' />", $actual );
+
+		ob_start();
+		@do_action( 'wp_footer' );
+		$footer = ob_get_clean();
+
+		$this->assertEquals( sprintf( '<noscript>%1$s<link href=\'\' media=\'all\' />%1$s</noscript>%1$s', PHP_EOL ), $footer );
 	}
 
 }

@@ -6,9 +6,30 @@ defined( 'WPINC' ) || die();
 
 abstract class Output_Html extends \QM_Output_Html {
 
+	const TYPE = '';
+
+	/**
+	 * Collector instance.
+	 *
+	 * @var Collector
+	 */
+	protected $collector;
+
+	/**
+	 * @return string[]
+	 */
+	abstract public function get_type_labels() : array;
+
+	/**
+	 * @return Collector
+	 */
+	public function get_collector() {
+		return $this->collector;
+	}
+
 	public function output() {
 		$data = $this->collector->get_data();
-		$data = $data->assets;
+		$data = ( array ) $data->assets;
 
 		if ( empty( $data ) ) {
 			$this->before_non_tabular_output();
@@ -23,7 +44,7 @@ abstract class Output_Html extends \QM_Output_Html {
 
 		$helper = 'scripts' === $this->get_collector()->get_dependency_type() ? 'wp_script_is' : 'wp_style_is';
 
-		$data = array_filter( $data, function( $handle ) use( $helper ) {
+		$data = array_filter( $data, function ( $handle ) use ( $helper ) {
 			return $helper( $handle, 'done' );
 		}, ARRAY_FILTER_USE_KEY );
 
@@ -52,12 +73,13 @@ abstract class Output_Html extends \QM_Output_Html {
 
 					echo '<tr' . ( $odd ? ' class="qm-odd"' : '' ) . '>';
 
-						if ( $first )
+						if ( $first ) {
 							echo '<th scope="row" class="qm-nowrap qm-ltr" rowspan="' . count( $enhancements ) . '">'
 								. '<span class="qm-sticky">'
 									. esc_html( $handle )
 								. '</span>'
 							. '</th>';
+						}
 
 						echo '<td class="qm-nowrap qm-ltr">' . esc_html( $key ) . '</td>';
 						echo '<td class="qm-ltr"><code>'
@@ -90,5 +112,3 @@ abstract class Output_Html extends \QM_Output_Html {
 	}
 
 }
-
-?>

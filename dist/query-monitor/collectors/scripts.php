@@ -9,8 +9,14 @@ defined( 'WPINC' ) || die();
 
 class Collector_Scripts extends Collector {
 
+	/**
+	 * @var string
+	 */
 	public $id = 'enhanced_scripts';
 
+	/**
+	 * @return string
+	 */
 	public function get_dependency_type() : string {
 		return 'scripts';
 	}
@@ -20,5 +26,3 @@ class Collector_Scripts extends Collector {
 	}
 
 }
-
-?>

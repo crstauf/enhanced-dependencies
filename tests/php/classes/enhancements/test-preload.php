@@ -63,8 +63,8 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		$domain = 'http://' . uniqid( 'test-enqueued' ) . '.com';
 		$url = $domain . '/test-script.js';
 
-		wp_register_script( $handle, $url );
-		wp_enqueue_script( $handle );
+		\wp_register_script( $handle, $url );
+		\wp_enqueue_script( $handle );
 
 		$dependency = Dependency::get( $handle, true );
 		$dependency->set( Preload::KEY, array( 'http_header' => false ) );
@@ -75,7 +75,7 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		@do_action( 'wp_head' );
 		$output = ob_get_clean();
 
-		$this->assertIsInt( strpos( $output, '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" />' ) );
+		$this->assertStringContainsString( '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" as="script" />', $output );
 	}
 
 	function test_always() : void {
@@ -86,14 +86,14 @@ class Test_Enhancement_Preload extends \WP_UnitTestCase {
 		wp_register_script( $handle, $url );
 		$dependency = Dependency::get( $handle, true );
 
-		$dependency->set( Preload::KEY, array( 'always' => true, 'http_header' => false ) );
+		$dependency->set( Preload::KEY, array( 'always' => true ) );
 		$this->assertFalse( $dependency->is( 'enqueued' ) );
 
 		ob_start();
 		@do_action( 'wp_head' );
 		$output = ob_get_clean();
 
-		$this->assertIsInt( strpos( $output, '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" />' ) );
+		$this->assertStringContainsString( '<link rel="preload" id="' . $handle . '-preload-js" href="' . $dependency->get_url() . '" as="script" />', $output );
 	}
 
 	function test_not_link() : void {

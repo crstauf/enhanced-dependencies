@@ -19,14 +19,15 @@ class Inline extends Enhancement {
 	 * @param string $tag
 	 * @param string $handle
 	 * @param bool $is_script
-	 * @param array $options
+	 * @param mixed[] $options
 	 * @return string
 	 */
-	static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
+	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
 		$path = static::get_dependency_path( $handle, $is_script );
 
-		if ( empty( $path ) )
+		if ( empty( $path ) ) {
 			return $tag;
+		}
 
 		$content = file_get_contents( $path );
 
@@ -38,14 +39,17 @@ class Inline extends Enhancement {
 		if (
 			'production' !== wp_get_environment_type()
 			&& empty( $content )
-		)
+		) {
 			$content = '/* empty */';
+		}
 
-		if ( empty( $content ) )
+		if ( empty( $content ) ) {
 			return ''; // @codeCoverageIgnore
+		}
 
-		if ( $is_script )
+		if ( $is_script ) {
 			return '<script id="' . esc_attr( $handle ) . '-inline-js">' . $content . '</script>';
+		}
 
 		return '<style id="' . esc_attr( $handle ) . '-inline-css">' . $content . '</style>';
 	}
@@ -58,20 +62,32 @@ class Inline extends Enhancement {
 	 * @return string
 	 *
 	 * @todo move into Dependency class
-	 * @todo add test for exteranl dependnecy check
+	 * @todo add test for external dependency check
 	 */
 	protected static function get_dependency_path( string $handle, bool $is_script ) : string {
 		$dependency = Dependency::get( $handle, $is_script );
+		$dep        = $dependency->wp_dep();
 
-		$path = str_replace( trailingslashit( site_url() ), trailingslashit( ABSPATH ), $dependency->wp_dep()->src );
+		if ( ! is_object( $dep ) ) {
+			return '';
+		}
 
-		if ( $dependency->helper()->in_default_dir( $dependency->wp_dep()->src ) )
+		$path = str_replace( trailingslashit( site_url() ), trailingslashit( ABSPATH ), $dep->src );
+
+		if ( $dependency->helper()->in_default_dir( $dep->src ) ) {
 			$path = ABSPATH . $path;
+		}
 
 		$path = apply_filters( 'enhanced-dependencies/dependency/path', $path, $handle, $is_script );
 
-		if ( !file_exists( $path ) ) {
-			trigger_error( sprintf( 'Unable to find <code>%s</code> %s file at <code>%s</code>.', $handle, $is_script ? 'script' : 'stylesheet', $path ) );
+		if ( ! file_exists( $path ) ) {
+			trigger_error( sprintf(
+				'Unable to find <code>%s</code> %s file at <code>%s</code>.',
+				$handle,
+				$is_script ? 'script' : 'stylesheet',
+				$path
+			) );
+
 			return '';
 		}
 
@@ -81,5 +97,3 @@ class Inline extends Enhancement {
 }
 
 Inline::register();
-
-?>
