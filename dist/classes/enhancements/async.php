@@ -32,7 +32,7 @@ class Async extends Enhancement {
 	 */
 	public static function apply( string $tag, string $handle, bool $is_script, array $options = array() ) : string {
 		if ( $is_script ) {
-			return str_replace( '<script src=', '<script async src=', $tag );
+			return str_replace( '<script ', '<script async ', $tag );
 		}
 
 		$id       = sprintf( '%s-css', esc_attr( $handle ) );
