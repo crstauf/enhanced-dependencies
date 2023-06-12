@@ -98,19 +98,17 @@ class Integrate {
 		}
 
 		$collector = \QM_Collectors::get( 'enhanced_scripts' );
-
 		if ( ! is_null( $collector ) ) {
 			$panel_menus['qm-assets_scripts']['children']['qm-enhanced_scripts'] = array(
-				'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()['assets'] ) ),
+				'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()->assets ) ),
 				'href'  => '#qm-enhanced_scripts',
 			);
 		}
 
 		$collector = \QM_Collectors::get( 'enhanced_styles' );
-
 		if ( ! is_null( $collector ) ) {
 			$panel_menus['qm-assets_styles']['children']['qm-enhanced_styles'] = array(
-				'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()['assets'] ) ),
+				'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()->assets ) ),
 				'href'  => '#qm-enhanced_styles',
 			);
 		}
