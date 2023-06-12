@@ -4,3 +4,8 @@ parameters:
 			message: "#^Call to function is_null\\(\\) with bool\\|string will always evaluate to false\\.$#"
 			count: 1
 			path: dist/classes/dependency.php
+
+		-
+			message: "#^Access to an undefined property QM_Data\\:\\:\\$assets\\.$#"
+			count: 2
+			path: dist/query-monitor/query-monitor.php
