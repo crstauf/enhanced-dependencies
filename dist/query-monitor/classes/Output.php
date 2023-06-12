@@ -44,17 +44,35 @@ abstract class Output_Html extends \QM_Output_Html {
 
 		$helper = 'scripts' === $this->get_collector()->get_dependency_type() ? 'wp_script_is' : 'wp_style_is';
 
-		$data = array_filter( $data, function ( $handle ) use ( $helper ) {
-			return $helper( $handle, 'done' );
-		}, ARRAY_FILTER_USE_KEY );
-
 		ksort( $data );
+
+		$data_statuses = array();
+
+		foreach ( array_keys( $data ) as $handle ) {
+			foreach ( array(
+				'registered',
+				'enqueued',
+				'to_do',
+				'done',
+			) as $status ) {
+				if ( ! $helper( $handle, $status ) ) {
+					continue;
+				}
+
+				if ( ! array_key_exists( $handle, $data_statuses ) ) {
+					$data_statuses[ $handle ] = array();
+				}
+
+				$data_statuses[ $handle ][] = $status;
+			}
+		}
 
 		$this->before_tabular_output();
 
 		echo '<thead>'
 			. '<tr>'
 				. '<th scope="col">' . esc_html__( 'Handle', 'query-monitor' ) . '</th>'
+				. '<th scope="col">' . esc_html__( 'Status', 'query-monitor' ) . '</th>'
 				. '<th scope="col">' . esc_html__( 'Enhancement', 'query-monitor' ) . '</th>'
 				. '<th scope="col">' . esc_html__( 'Options', 'query-monitor' ) . '</th>'
 			. '</tr>'
@@ -79,6 +97,8 @@ abstract class Output_Html extends \QM_Output_Html {
 									. esc_html( $handle )
 								. '</span>'
 							. '</th>';
+
+							printf( '<td class="qm-nowrap qm-ltr" rowspan="%d">%s</td>', count( $enhancements ), esc_html( implode( ' ', $data_statuses[ $handle ] ) ) );
 						}
 
 						echo '<td class="qm-nowrap qm-ltr">' . esc_html( $key ) . '</td>';
@@ -98,7 +118,7 @@ abstract class Output_Html extends \QM_Output_Html {
 			. '<tr>';
 
 				printf(
-					'<td colspan="3">%s</td>',
+					'<td colspan="4">%s</td>',
 					sprintf(
 						esc_html( $this->get_type_labels()['total'] ),
 						'<span clas="qm-items-number">' . esc_html( number_format_i18n( count( $data ) ) ) . '</span>'
