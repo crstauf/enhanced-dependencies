@@ -97,23 +97,34 @@ class Integrate {
 			}
 		}
 
-		$collector = \QM_Collectors::get( 'enhanced_scripts' );
+		$scripts = array();
+		$styles  = array();
 
+		$collector = \QM_Collectors::get( 'enhanced_scripts' );
 		if ( ! is_null( $collector ) ) {
-			$panel_menus['qm-assets_scripts']['children']['qm-enhanced_scripts'] = array(
-				'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()['assets'] ) ),
-				'href'  => '#qm-enhanced_scripts',
-			);
+			$scripts   = $collector->get_data()->assets;
+			$scripts   = array_filter( $scripts, function( $handle ) {
+				return wp_script_is( $handle, 'done' );
+			}, ARRAY_FILTER_USE_KEY );
 		}
 
 		$collector = \QM_Collectors::get( 'enhanced_styles' );
-
 		if ( ! is_null( $collector ) ) {
-			$panel_menus['qm-assets_styles']['children']['qm-enhanced_styles'] = array(
-				'title' => sprintf( 'Enhanced (%d)', count( $collector->get_data()['assets'] ) ),
-				'href'  => '#qm-enhanced_styles',
-			);
+			$styles    = $collector->get_data()->assets;
+			$styles    = array_filter( $styles, function( $handle ) {
+				return wp_style_is( $handle, 'done' );
+			}, ARRAY_FILTER_USE_KEY );
 		}
+
+		$panel_menus['qm-assets_scripts']['children']['qm-enhanced_scripts'] = array(
+			'title' => sprintf( 'Enhanced (%d)', count( $scripts ) ),
+			'href'  => '#qm-enhanced_scripts',
+		);
+
+		$panel_menus['qm-assets_styles']['children']['qm-enhanced_styles'] = array(
+			'title' => sprintf( 'Enhanced (%d)', count( $styles ) ),
+			'href'  => '#qm-enhanced_styles',
+		);
 
 		return $panel_menus;
 	}
